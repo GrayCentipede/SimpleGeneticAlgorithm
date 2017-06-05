@@ -16,9 +16,9 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generations = 2, populSize = 5, PC = 0.75, PM = 0.015, xi, yi, size;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 2, populSize = 5, generalFitness = 0, PC = 0.75, PM = 0.015, xi, yi, size;
 
-var individuals = [], chromosome = [], individualsFitness = [];
+var individuals = [], chromosome = [], individualsFitness = [], relativeFitness = [], chosenOnes = [];
 
 function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para saber el tamaño del cromosoma
 { 
@@ -27,6 +27,64 @@ function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para
 
 function mathematicalFunction(x,y){
 	return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
+}
+
+function selection(individuals, relativeFitness){
+
+	//El proceso de selección que se usará aquí sera el llamado: Método de la ruleta 
+
+	var accumulatedFitnessTotal = 0, randomNum, y, z=0;
+
+	var chosenOnes = [], accumulatedFitness = [];
+
+	var selected;
+
+	for (x in individuals) //Se genera una aptitud acumulada
+	{
+
+		accumulatedFitnessTotal += relativeFitness[x];
+		accumulatedFitness[x] = accumulatedFitnessTotal;
+
+	}
+
+	for (x in individuals) //Se generan n cantidad de numeros aleatorios; donde n = Número de Ind.
+	{
+		console.log("---------------------------------------------------");
+		y=0;
+		selected = false;
+		randomNum = Math.random();
+
+		do //Individuo por individuo se va checando que el número generado sea menor o mayor que la aptitud acumulada que tiene
+		{
+			console.log("Comprobando que "+ randomNum + " sea menor que "+ accumulatedFitness[y]);
+
+			if (randomNum < accumulatedFitness[y])
+			{
+				console.log("Verdadero, el individuo: "+ parseInt(y+1) +" ha sido seleccionado");
+				chosenOnes[z] = individuals[y]
+				z++;
+				selected = true;
+			}
+			else
+			{
+				console.log("Falso");
+				if (y == individuals.lenght)
+				{
+					console.log("Nadie pasó la prueba");
+				}
+				else
+					y++;
+			}
+
+		} while(selected != true && y != individuals.length);
+	}
+
+	return chosenOnes;
+
+}
+
+function crossover(chosenOnes){
+
 }
 
 xSize = genSize(xl,xu,decimals);
@@ -62,20 +120,41 @@ for (var x=0; x<populSize; x++)
  	}
 }
 
+console.log("Generación: " + generation);
+
 for (x in individuals) // They are ALIVE!!
 {
 	chromosome[x] = individuals[x][0].concat(individuals[x][1]).join("");
 
-	console.log(( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ));
-
 	// 1.3 Decodificación de variables y evaluación en f(x,y)
-	for (z=0; z<xSize; z++){
-		chromosome
-	}
-	xi = xl + ( parseInt(chromosome[x][0], 2) * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
-	yi = yl + ( parseInt(chromosome[x][1], 2) * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
+
+	var genX = (individuals[x][0].join(""));
+	var genY = (individuals[x][1].join(""));
+
+	xi = xl + ( parseInt(genX, 2) * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
+	yi = yl + ( parseInt(genY, 2) * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 	individualsFitness[x] = mathematicalFunction(xi,yi);
 
-	console.log("Individuo "+ (parseInt(x)+1) + ": " + chromosome[x] + "\n Decimal: " + parseInt(chromosome[x], 2) + "\n Aptitud: " + individualsFitness[x]);
+	// 1.4 Calcular la aptitud de la generación
 
+	generalFitness += individualsFitness[x];
+}
+
+for (x in individualsFitness) //Calcular la aptitud relativa de cada individuo
+{
+	relativeFitness[x] = individualsFitness[x] / generalFitness;
+
+	console.log("Individuo "+ (parseInt(x)+1) + ": " + chromosome[x] + "\n Decimal: " + parseInt(chromosome[x], 2) + "\n Aptitud: " + individualsFitness[x] + "\n Aptitud relativa: " + relativeFitness[x]);
+}
+
+console.log("Aptitud de la población: "+generalFitness);
+
+//Se seleccionan los individuos que puede que se cruzen
+
+selectedOnes = selection(individuals, relativeFitness)
+
+console.log("Cromosomas que pasaron la selección:");
+for (x in chosenOnes)
+{
+	console.log(chosenOnes[x][0].concat(chosenOnes[x][1]).join(""));
 }
