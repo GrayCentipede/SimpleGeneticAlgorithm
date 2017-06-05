@@ -1,4 +1,5 @@
 /*Implementación de un Algoritmo Genético en JS
+Hecho por Mauricio Carrasco Ruiz
 Problema: 
 Maximizar la función f(x,y) = 21.5 + x*sen(4*PI*x) + y*sen(20*PI*y)
 Con los siguientes rangos: x=[-3.0,12.1] e y=[4.1,5.8]
@@ -18,7 +19,7 @@ PASOS A SEGUIR PARA UN AG
 
 var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 2, populSize = 5, generalFitness = 0, PC = 0.75, PM = 0.015, xi, yi, size;
 
-var individuals = [], chromosome = [], individualsFitness = [], relativeFitness = [], chosenOnes = [];
+var individuals = [], chromosome = [], individualsFitness = [], relativeFitness = [], selectedOnes = [];
 
 function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para saber el tamaño del cromosoma
 { 
@@ -35,7 +36,7 @@ function selection(individuals, relativeFitness){
 
 	var accumulatedFitnessTotal = 0, randomNum, y, z=0;
 
-	var chosenOnes = [], accumulatedFitness = [];
+	var selectedOnes = [], accumulatedFitness = [];
 
 	var selected;
 
@@ -61,7 +62,7 @@ function selection(individuals, relativeFitness){
 			if (randomNum < accumulatedFitness[y])
 			{
 				console.log("Verdadero, el individuo: "+ parseInt(y+1) +" ha sido seleccionado");
-				chosenOnes[z] = individuals[y]
+				selectedOnes[z] = individuals[y]
 				z++;
 				selected = true;
 			}
@@ -79,12 +80,68 @@ function selection(individuals, relativeFitness){
 		} while(selected != true && y != individuals.length);
 	}
 
-	return chosenOnes;
+	return selectedOnes;
 
 }
 
-function crossover(chosenOnes){
+function crossover(selectedOnes, PC)
+{
+	
+	var randomNum, y=0, z = 0, n=0, size;
+	var chosenOnes = [], chromosome = [], mimicryX = [], mimicryY = [];
 
+
+	for (x in selectedOnes)
+	{
+		randomNum = Math.random();
+		if (randomNum <= PC)
+		{
+			console.log("Individuo "+ (parseInt(x)+1) +" ha sido elegido");
+			chosenOnes[z] = x;
+			z++;
+		}
+
+		chromosome[x] = selectedOnes[x][0].concat(selectedOnes[x][1]);
+	}
+
+	size = chromosome[0].length;
+
+	console.log(chosenOnes);
+	console.log(Math.floor(chosenOnes.length/2));
+
+	while(y < Math.floor(chosenOnes.length/2))
+	{
+		console.log("Cruza ocurre entre el individuo: "+chosenOnes[n]+" y el individuo "+chosenOnes[n+1]);
+		
+		randomNum = Math.floor(Math.random() * size) + 1;
+
+		console.log("Numero elegido: "+ randomNum);
+
+		console.log("Cromosomas orginales: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+
+		mimicryX = chromosome[chosenOnes[n]].splice(randomNum);
+		mimicryY = chromosome[chosenOnes[n+1]].splice(randomNum);
+		console.log(mimicryX.join("") + "\n" + mimicryY.join(""));
+
+		//Intercambio de Bits
+		var temporal = mimicryX; //Se crea una variable temporal que almacene los datos de X
+		mimicryX = mimicryY; // X toma todos los elementos/bits de Y
+		mimicryY = temporal; // Y toma todos los elementos/bits de temporal la cual tiene los datos de X
+
+		console.log(mimicryX.join("") + "\n" + mimicryY.join(""));
+
+		//Se reorganizan los cromosomas
+		chromosome[chosenOnes[n]] = chromosome[chosenOnes[n]].concat(mimicryX);
+		chromosome[chosenOnes[n+1]] = chromosome[chosenOnes[n+1]].concat(mimicryY);
+
+		console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+
+
+
+		n += 2;
+		y++;
+
+	}
 }
 
 xSize = genSize(xl,xu,decimals);
@@ -154,7 +211,9 @@ console.log("Aptitud de la población: "+generalFitness);
 selectedOnes = selection(individuals, relativeFitness)
 
 console.log("Cromosomas que pasaron la selección:");
-for (x in chosenOnes)
+for (x in selectedOnes)
 {
-	console.log(chosenOnes[x][0].concat(chosenOnes[x][1]).join(""));
+	console.log(selectedOnes[x][0].concat(selectedOnes[x][1]).join(""));
 }
+
+crossover(selectedOnes,PC);
