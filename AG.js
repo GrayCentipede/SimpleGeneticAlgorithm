@@ -19,7 +19,7 @@ PASOS A SEGUIR PARA UN AG
 
 var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 2, populSize = 5, generalFitness = 0, PC = 0.75, PM = 0.015, xi, yi, size;
 
-var individuals = [], chromosome = [], individualsFitness = [], relativeFitness = [], selectedOnes = [];
+var individuals = [], chromosome = [], individualsFitness = [], relativeFitness = [], selectedOnes = [], heirs;
 
 function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para saber el tamaño del cromosoma
 { 
@@ -50,14 +50,14 @@ function selection(individuals, relativeFitness){
 
 	for (x in individuals) //Se generan n cantidad de numeros aleatorios; donde n = Número de Ind.
 	{
-		console.log("---------------------------------------------------");
+		console.log("--------------------Selección----------------------");
 		y=0;
 		selected = false;
 		randomNum = Math.random();
 
 		do //Individuo por individuo se va checando que el número generado sea menor o mayor que la aptitud acumulada que tiene
 		{
-			console.log("Comprobando que "+ randomNum + " sea menor que "+ accumulatedFitness[y]);
+			console.log("Comprobando que "+ randomNum.toFixed(4) + " sea menor que "+ accumulatedFitness[y].toFixed(4));
 
 			if (randomNum < accumulatedFitness[y])
 			{
@@ -69,12 +69,7 @@ function selection(individuals, relativeFitness){
 			else
 			{
 				console.log("Falso");
-				if (y == individuals.lenght)
-				{
-					console.log("Nadie pasó la prueba");
-				}
-				else
-					y++;
+				y++;
 			}
 
 		} while(selected != true && y != individuals.length);
@@ -86,16 +81,17 @@ function selection(individuals, relativeFitness){
 
 function crossover(selectedOnes, PC)
 {
-	
+	//En el proceso de la cruza se llevo a cabo el método de cruza por un solo punto
 	var randomNum, y=0, z = 0, n=0, size;
 	var chosenOnes = [], chromosome = [], mimicryX = [], mimicryY = [];
 
-
+	//Se genera un número aleatorio y dependiendo de si este número es menor a la Probablididad de cruza se escogera al individuo
 	for (x in selectedOnes)
 	{
 		randomNum = Math.random();
 		if (randomNum <= PC)
 		{
+			//De los individuos que se seleccionen se guardará la localidad que tienen para seguir teniendo un orden con los individuos
 			console.log("Individuo "+ (parseInt(x)+1) +" ha sido elegido");
 			chosenOnes[z] = x;
 			z++;
@@ -106,29 +102,32 @@ function crossover(selectedOnes, PC)
 
 	size = chromosome[0].length;
 
-	console.log(chosenOnes);
-	console.log(Math.floor(chosenOnes.length/2));
-
+	//Se realiza la cruza entre cromosomas, siempre y cuando haya parejas, en caso de que no haya el cromosoma restante pasa sin haber sido cruzado
 	while(y < Math.floor(chosenOnes.length/2))
-	{
-		console.log("Cruza ocurre entre el individuo: "+chosenOnes[n]+" y el individuo "+chosenOnes[n+1]);
+	{	
+		console.log("------------------------Cruza-----------------------");
+		console.log("Cruza ocurre entre el individuo: "+ (parseInt(chosenOnes[n])+1) +" y el individuo "+ (parseInt(chosenOnes[n+1])+1) );
 		
-		randomNum = Math.floor(Math.random() * size) + 1;
+		//Se generará un número aleatorio que indicará desde donde será cortada la cadena de bits
+		randomNum = Math.floor(Math.random() * (size-1)) + 1;
 
 		console.log("Numero elegido: "+ randomNum);
 
 		console.log("Cromosomas orginales: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
 
+		//Se cortan los respectivos trozos de la cadena y se guardan en las variables temporales mimicry 
 		mimicryX = chromosome[chosenOnes[n]].splice(randomNum);
 		mimicryY = chromosome[chosenOnes[n+1]].splice(randomNum);
-		console.log(mimicryX.join("") + "\n" + mimicryY.join(""));
 
-		//Intercambio de Bits
-		var temporal = mimicryX; //Se crea una variable temporal que almacene los datos de X
-		mimicryX = mimicryY; // X toma todos los elementos/bits de Y
-		mimicryY = temporal; // Y toma todos los elementos/bits de temporal la cual tiene los datos de X
+		/*Intercambio de Bits 
+		Se crea una variable temporal que almacene los datos de X */
+		var temporal = mimicryX;
 
-		console.log(mimicryX.join("") + "\n" + mimicryY.join(""));
+		// X toma todos los elementos/bits de Y 
+		mimicryX = mimicryY;
+
+		// Y toma todos los elementos/bits de temporal la cual tiene los datos de X 
+		mimicryY = temporal;
 
 		//Se reorganizan los cromosomas
 		chromosome[chosenOnes[n]] = chromosome[chosenOnes[n]].concat(mimicryX);
@@ -136,13 +135,46 @@ function crossover(selectedOnes, PC)
 
 		console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
 
-
-
 		n += 2;
 		y++;
 
+		//Fin de la cruza entre parejas
 	}
+
+	return chromosome;
 }
+
+function mutation(individuals, PM)
+{
+	console.log("----------------------Mutación------------------------");
+
+	var randomNum;
+
+	for (x in individuals)
+	{
+
+		for (y in individuals[x])
+		{
+			randomNum = Math.random();
+
+			if (randomNum <= PM)
+			{
+				console.log("Mutó el individuo "+ (parseInt(x)+1) +" en el bit número: "+ (parseInt(y)+1) );
+
+				if (individuals[x][y] == 1)
+					individuals[x][y] = 0;
+				else
+					individuals[x][y] = 1
+			}
+
+		}
+
+	}
+
+	return individuals;
+}
+
+// 1.0 Algoritmo Genético Básico
 
 xSize = genSize(xl,xu,decimals);
 ySize = genSize(yl,yu,decimals);
@@ -197,16 +229,17 @@ for (x in individuals) // They are ALIVE!!
 	generalFitness += individualsFitness[x];
 }
 
+console.log("Aptitud de la población: "+generalFitness);
+
 for (x in individualsFitness) //Calcular la aptitud relativa de cada individuo
 {
 	relativeFitness[x] = individualsFitness[x] / generalFitness;
 
-	console.log("Individuo "+ (parseInt(x)+1) + ": " + chromosome[x] + "\n Decimal: " + parseInt(chromosome[x], 2) + "\n Aptitud: " + individualsFitness[x] + "\n Aptitud relativa: " + relativeFitness[x]);
+	console.log("Individuo "+ (parseInt(x)+1) + ": " + chromosome[x] + "\n Decimal Total: " + parseInt(chromosome[x], 2) + "\n Decimal X: " + parseInt(individuals[x][0].join(""), 2) + "\n Decimal Y: " + parseInt(individuals[x][1].join(""), 2) + "\n Aptitud: " + individualsFitness[x].toFixed(4) + "\n Aptitud relativa: " + relativeFitness[x].toFixed(4));
 }
 
-console.log("Aptitud de la población: "+generalFitness);
-
-//Se seleccionan los individuos que puede que se cruzen
+/* 1.5 Primer ciclo de Evolución (Primera Generación)
+Se seleccionan los individuos que puede que se cruzen */
 
 selectedOnes = selection(individuals, relativeFitness)
 
@@ -216,4 +249,15 @@ for (x in selectedOnes)
 	console.log(selectedOnes[x][0].concat(selectedOnes[x][1]).join(""));
 }
 
-crossover(selectedOnes,PC);
+// 1.6 Cruza
+chosenOnes = crossover(selectedOnes,PC);
+
+// 1.7 Mutación
+heirs = mutation(chosenOnes,PM);
+
+console.log("------------------Nueva Población--------------------");
+
+for (x in heirs)
+{
+	console.log("Individuo "+ (parseInt(x)+1) +": "+heirs[x].join(""));
+}
