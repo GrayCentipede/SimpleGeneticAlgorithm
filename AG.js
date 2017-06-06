@@ -43,7 +43,7 @@ function selection(individuals, relativeFitness){
 	for (x in individuals) //Se genera una aptitud acumulada
 	{
 
-		accumulatedFitnessTotal += relativeFitness[x];
+		accumulatedFitnessTotal += parseFloat(relativeFitness[x]);
 		accumulatedFitness[x] = accumulatedFitnessTotal;
 
 	}
@@ -57,7 +57,7 @@ function selection(individuals, relativeFitness){
 
 		do //Individuo por individuo se va checando que el número generado sea menor o mayor que la aptitud acumulada que tiene
 		{
-			console.log("Comprobando que "+ randomNum.toFixed(4) + " sea menor que "+ accumulatedFitness[y].toFixed(4));
+			console.log("Comprobando que "+ randomNum.toFixed(4) + " sea menor que "+ accumulatedFitness[y]);
 
 			if (randomNum < accumulatedFitness[y])
 			{
@@ -97,8 +97,11 @@ function crossover(selectedOnes, PC)
 			z++;
 		}
 
-		chromosome[x] = selectedOnes[x][0].concat(selectedOnes[x][1]);
 	}
+
+	console.log(chosenOnes);
+
+	chromosome = selectedOnes;
 
 	size = chromosome[0].length;
 
@@ -174,7 +177,54 @@ function mutation(individuals, PM)
 	return individuals;
 }
 
-// 1.0 Algoritmo Genético Básico
+function fitness(individuals, xl, xu, yl, yu, size, xSize)
+{
+	var fitness = [], genX = [], genY = [];
+
+	var xDecimal, yDecimal;
+
+	for (x in individuals)
+	{
+		for(y=0; y<xSize; y++)
+			genX[y] = individuals[x][y];
+
+		for(z=xSize; z<size; z++)
+			genY[z] = individuals[x][z];
+
+		xDecimal = parseInt( genX.join("") , 2);
+		yDecimal = parseInt( genY.join("") , 2);
+
+		xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
+		yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
+
+		fitness[x] = mathematicalFunction(xi,yi);
+		fitness[x] = fitness[x].toFixed(4);
+	}
+
+	return fitness;
+}
+
+function populationFitness(fitness)
+{
+	var generalFitness = 0;
+
+	for (x in fitness)
+		generalFitness += parseInt(fitness[x]);
+
+	return generalFitness;
+}
+
+function relative(fitness, generalFitness)
+{
+	var relative = [];
+
+	for(x in fitness)
+		relative[x] = (fitness[x] / generalFitness).toFixed(4);
+
+	return relative;
+}
+
+// ------------------------------
 
 xSize = genSize(xl,xu,decimals);
 ySize = genSize(yl,yu,decimals);
@@ -186,57 +236,34 @@ console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromo
 
 //1.2 Generar a la población inicial
 
-for (var x=0; x<populSize; x++)
+for (var x=0; x<populSize; x++) // They're ALIVE!!!
 {
-	individuals[x] = ["x","y"];
-	individuals[x][0] = [];
-	individuals[x][1] = [];
-	for(y=0; y<2; y++){
-
-		if (y==0)
-			size = xSize;
-		else 
-			size = ySize;
-
- 		for(var z=0; z<size; z++)
- 		{
- 			randomNum = Math.random();
- 			if (randomNum >= 0.5)
- 				individuals[x][y][z] = 1;
- 			else
- 				individuals[x][y][z] = 0;
- 		}
+	individuals[x] = [];
+	for(y=0; y<chromosomeSize; y++)
+	{
+ 		randomNum = Math.random();
+ 		if (randomNum >= 0.5)
+ 			individuals[x][y] = 1;
+ 		else
+ 			individuals[x][y] = 0;
  	}
 }
 
 console.log("Generación: " + generation);
 
-for (x in individuals) // They are ALIVE!!
-{
-	chromosome[x] = individuals[x][0].concat(individuals[x][1]).join("");
+// 1.3 Decodificación de variables y evaluación en f(x,y)
+individualsFitness = fitness(individuals, xl, xu, yl, yu, chromosomeSize, xSize);
 
-	// 1.3 Decodificación de variables y evaluación en f(x,y)
+// 1.4 Calcular la aptitud de la generación
+generalFitness = populationFitness(individualsFitness);
 
-	var genX = (individuals[x][0].join(""));
-	var genY = (individuals[x][1].join(""));
-
-	xi = xl + ( parseInt(genX, 2) * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
-	yi = yl + ( parseInt(genY, 2) * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
-	individualsFitness[x] = mathematicalFunction(xi,yi);
-
-	// 1.4 Calcular la aptitud de la generación
-
-	generalFitness += individualsFitness[x];
-}
+// 1.5 Calcular la aptitud relativa de cada individuo
+relativeFitness = relative(individualsFitness, generalFitness);
 
 console.log("Aptitud de la población: "+generalFitness);
 
-for (x in individualsFitness) //Calcular la aptitud relativa de cada individuo
-{
-	relativeFitness[x] = individualsFitness[x] / generalFitness;
-
-	console.log("Individuo "+ (parseInt(x)+1) + ": " + chromosome[x] + "\n Decimal Total: " + parseInt(chromosome[x], 2) + "\n Decimal X: " + parseInt(individuals[x][0].join(""), 2) + "\n Decimal Y: " + parseInt(individuals[x][1].join(""), 2) + "\n Aptitud: " + individualsFitness[x].toFixed(4) + "\n Aptitud relativa: " + relativeFitness[x].toFixed(4));
-}
+for (x in individualsFitness) 
+	console.log("Individuo "+ (parseInt(x)+1) + ": " + individuals[x].join("") + "\n Aptitud: " + individualsFitness[x] + "\n Aptitud relativa: " + relativeFitness[x]);
 
 /* 1.5 Primer ciclo de Evolución (Primera Generación)
 Se seleccionan los individuos que puede que se cruzen */
@@ -246,11 +273,14 @@ selectedOnes = selection(individuals, relativeFitness)
 console.log("Cromosomas que pasaron la selección:");
 for (x in selectedOnes)
 {
-	console.log(selectedOnes[x][0].concat(selectedOnes[x][1]).join(""));
+	console.log(selectedOnes[x].join(""));
 }
 
 // 1.6 Cruza
 chosenOnes = crossover(selectedOnes,PC);
+
+for (x in chosenOnes)
+	console.log("Supervivientes "+ (parseInt(x)+1) +": "+chosenOnes[x].join(""));
 
 // 1.7 Mutación
 heirs = mutation(chosenOnes,PM);
@@ -258,6 +288,17 @@ heirs = mutation(chosenOnes,PM);
 console.log("------------------Nueva Población--------------------");
 
 for (x in heirs)
-{
 	console.log("Individuo "+ (parseInt(x)+1) +": "+heirs[x].join(""));
-}
+
+individualsFitness = fitness(heirs, xl, xu, yl, yu, chromosomeSize, xSize);
+
+generalFitness = populationFitness(individualsFitness);
+
+relativeFitness = relative(individualsFitness, generalFitness);
+
+console.log("-----------------------------------------------------");
+
+console.log("Aptitud de la Generación: "+generalFitness);
+
+for (x in individualsFitness)
+	console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
