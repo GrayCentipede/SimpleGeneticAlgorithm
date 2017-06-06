@@ -100,8 +100,10 @@ function crossover(selectedOnes, PC)
 	}
 
 	console.log(chosenOnes);
-
-	chromosome = selectedOnes;
+	for (x in selectedOnes)
+	{
+		chromosome[x] = selectedOnes[x].slice(0);
+	}
 
 	size = chromosome[0].length;
 
@@ -143,6 +145,8 @@ function crossover(selectedOnes, PC)
 
 		//Fin de la cruza entre parejas
 	}
+	for (x in selectedOnes)
+		console.log("Como llegaron "+ (parseInt(x)+1) +": "+selectedOnes[x].join(""));
 
 	return chromosome;
 }
@@ -268,7 +272,7 @@ for (x in individualsFitness)
 /* 1.5 Primer ciclo de Evolución (Primera Generación)
 Se seleccionan los individuos que puede que se cruzen */
 
-selectedOnes = selection(individuals, relativeFitness)
+selectedOnes = selection(individuals, relativeFitness);
 
 console.log("Cromosomas que pasaron la selección:");
 for (x in selectedOnes)
@@ -290,15 +294,41 @@ console.log("------------------Nueva Población--------------------");
 for (x in heirs)
 	console.log("Individuo "+ (parseInt(x)+1) +": "+heirs[x].join(""));
 
-individualsFitness = fitness(heirs, xl, xu, yl, yu, chromosomeSize, xSize);
+generation++;
 
-generalFitness = populationFitness(individualsFitness);
+do
+{
+	console.log("------------------Generación " + generation+"-----------------");
 
-relativeFitness = relative(individualsFitness, generalFitness);
+	console.log("------------------ Población --------------------");
 
-console.log("-----------------------------------------------------");
+	for (x in heirs)
+		console.log("Individuo "+ (parseInt(x)+1) +": "+heirs[x].join(""));
 
-console.log("Aptitud de la Generación: "+generalFitness);
+	individualsFitness = fitness(heirs, xl, xu, yl, yu, chromosomeSize, xSize);
 
-for (x in individualsFitness)
-	console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
+	generalFitness = populationFitness(individualsFitness);
+
+	relativeFitness = relative(individualsFitness, generalFitness);
+
+	console.log("Aptitud de la Generación: "+generalFitness);
+
+	for (x in individualsFitness)
+		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
+
+	selectedOnes = selection(heirs, relativeFitness);
+
+	console.log("Cromosomas que pasaron la selección:");
+	for (x in selectedOnes)
+	{
+		console.log(selectedOnes[x].join(""));
+	}
+	chosenOnes = crossover(selectedOnes,PC);
+
+	for (x in chosenOnes)
+		console.log("Supervivientes "+ (parseInt(x)+1) +": "+chosenOnes[x].join(""));
+
+	heirs = mutation(chosenOnes,PM);
+
+	generation++;
+} while (generation <= maxGenerations);
