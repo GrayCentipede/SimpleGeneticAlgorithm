@@ -69,7 +69,7 @@ do
 	bestFitness = Math.max.apply(Math, individualsFitness);
 
 	var graphPoints = document.getElementById("Graphic").getAttribute("points");
-	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseInt(bestFitness)*10) +", ");
+	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
 	document.getElementById("Graphic").setAttribute("points", graphPoints);
 
 	selectedOnes = selection(individuals, individualsFitness);
