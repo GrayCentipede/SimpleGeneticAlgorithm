@@ -17,7 +17,7 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 5, generalFitness = 0, PC = 0.75, PM = 0.015;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015;
 
 var individuals = [], relativeFitness = [], selectedOnes = [];
 
