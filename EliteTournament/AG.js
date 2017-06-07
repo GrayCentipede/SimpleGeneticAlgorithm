@@ -17,9 +17,9 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015, bestFitness, worstFitness, bfLoc, wfLoc;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015;
 
-var individuals = [], relativeFitness = [], selectedOnes = [], bestIndividual = [];
+var individuals = [], selectedOnes = [], chosenOnes = [], bestIndividual = [];
 
 // ------------------------------
 
@@ -45,7 +45,7 @@ for (var x=0; x<populSize; x++) // They're ALIVE!!!
  			individuals[x][y] = 0;
  	}
 }
-	console.log(bestIndividual.join(""));
+
 do
 {
 	console.log("------------------Generación " + generation+"-----------------");
@@ -59,11 +59,7 @@ do
 
 	generalFitness = populationFitness(individualsFitness);
 
-	relativeFitness = relative(individualsFitness, generalFitness);
-
 	bestFitnessZ = bFitness(bestIndividual, xl, xu, yl, yu, chromosomeSize, xSize);
-
-	bestRealitiveF = bRelative(bestFitnessZ, generalFitness);
 
 	console.log("Aptitud que pasó: "+bestFitnessZ);
 
@@ -80,7 +76,6 @@ do
 	{
 		individuals[wfLoc] = bestIndividual;
 		individualsFitness[wfLoc] = bestFitnessZ;
-		relativeFitness[wfLoc] = bestRealitiveF;
 	}
 
 	bestFitness = Math.max.apply(Math, individualsFitness);
@@ -93,13 +88,19 @@ do
 	bestIndividual = individuals[bfLoc];
 
 	for (x in individualsFitness)
-		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
+		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x]);
+
+
+	console.log("Aptitud de la Generación: "+generalFitness);
+
+	for (x in individualsFitness)
+		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x]);
 
 	var graphPoints = document.getElementById("Graphic").getAttribute("points");
 	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseInt(bestFitness)*10) +", ");
 	document.getElementById("Graphic").setAttribute("points", graphPoints);
-	
-	selectedOnes = selection(individuals, relativeFitness);
+
+	selectedOnes = selection(individuals, individualsFitness);
 
 	/*console.log("Cromosomas que pasaron la selección:");
 	for (x in selectedOnes)

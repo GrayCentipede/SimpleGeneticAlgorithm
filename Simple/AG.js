@@ -17,7 +17,7 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, bestFitness=0, generalFitness = 0, PC = 0.75, PM = 0.015;
 
 var individuals = [], relativeFitness = [], selectedOnes = [];
 
@@ -65,6 +65,12 @@ do
 
 	for (x in individualsFitness)
 		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
+
+	bestFitness = Math.max.apply(Math, individualsFitness);
+
+	var graphPoints = document.getElementById("Graphic").getAttribute("points");
+	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseInt(bestFitness)*10) +", ");
+	document.getElementById("Graphic").setAttribute("points", graphPoints);
 
 	selectedOnes = selection(individuals, relativeFitness);
 
