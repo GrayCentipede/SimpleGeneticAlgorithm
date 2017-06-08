@@ -17,7 +17,7 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, bestFitness, generalFitness = 0, PC = 0.75, PM = 0.015;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 500, populSize = 25, bestFitness, generalFitness = 0, PC = 0.75, PM = 0.015;
 
 var individuals = [], relativeFitness = [], selectedOnes = [];
 
@@ -68,9 +68,13 @@ do
 
 	bestFitness = Math.max.apply(Math, individualsFitness);
 
-	var graphPoints = document.getElementById("GraphicTournament").getAttribute("points");
-	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
-	document.getElementById("GraphicTournament").setAttribute("points", graphPoints);
+
+	if (generation%10 == 0)
+	{
+		var graphPoints = document.getElementById("GraphicTournament").getAttribute("points");
+		graphPoints += ""+ ((5*(generation/10)+100)) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
+		document.getElementById("GraphicTournament").setAttribute("points", graphPoints);
+	}
 
 	selectedOnes = selectionTournament(individuals, individualsFitness);
 

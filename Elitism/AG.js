@@ -17,7 +17,7 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015, bestFitness, worstFitness, bfLoc, wfLoc;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 500, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015, bestFitness, worstFitness, bfLoc, wfLoc;
 
 var individuals = [], relativeFitness = [], selectedOnes = [], bestIndividual = [];
 
@@ -95,9 +95,12 @@ do
 	for (x in individualsFitness)
 		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
 
-	var graphPoints = document.getElementById("GraphicElitism").getAttribute("points");
-	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
-	document.getElementById("GraphicElitism").setAttribute("points", graphPoints);
+	if (generation%10 == 0)
+	{
+		var graphPoints = document.getElementById("GraphicElitism").getAttribute("points");
+		graphPoints += ""+ (5*(generation/10)+100) +" "+ (500 - (parseFloat(bestFitness)*10)) +", ";
+		document.getElementById("GraphicElitism").setAttribute("points", graphPoints);
+	}
 	
 	selectedOnes = selection(individuals, relativeFitness);
 
