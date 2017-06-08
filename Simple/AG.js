@@ -19,7 +19,7 @@ PASOS A SEGUIR PARA UN AG
 
 var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 100, populSize = 25, bestFitness=0, generalFitness = 0, PC = 0.75, PM = 0.015;
 
-var individuals = [], relativeFitness = [], selectedOnes = [];
+var individuals = [], relativeFitness = [], selectedOnes = [], recordsSimple = [];
 
 // ------------------------------
 
@@ -68,9 +68,11 @@ do
 
 	bestFitness = Math.max.apply(Math, individualsFitness);
 
-	var graphPoints = document.getElementById("Graphic").getAttribute("points");
+	recordsSimple[generation] = bestFitness;
+
+	var graphPoints = document.getElementById("GraphicSimple").getAttribute("points");
 	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
-	document.getElementById("Graphic").setAttribute("points", graphPoints);
+	document.getElementById("GraphicSimple").setAttribute("points", graphPoints);
 
 	selectedOnes = selection(individuals, relativeFitness);
 

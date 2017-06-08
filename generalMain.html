@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title> AG </title>
+		<meta charset="UTF-8">
+		<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+	</head>
+	<body>
+		<svg heigth="1000" width="1000" viewBox="0 0 1000 1000">
+			<text x="50" y="350" font-size="30" fill="blue" transform="rotate(270 50 350)"> Aptitud </text>
+
+			<text x="275" y="540" font-size="30" fill="blue" > Población </text>
+
+			<polyline	points="600 500, 60 500, 60 100"
+  						style="fill:none;stroke:black;stroke-width:3" />
+
+  			<polyline	id="GraphicSimple" 
+  						points=""
+  						style="fill:none;stroke:red;stroke-width:2" />
+
+  			<polyline	id="GraphicElitism" 
+  						points=""
+  						style="fill:none;stroke:green;stroke-width:2" /> 
+
+  			<polyline	id="GraphicTournament" 
+  						points=""
+  						style="fill:none;stroke:blue;stroke-width:2" /> 
+
+  			<polyline	id="GraphicEliteTournament" 
+  						points=""
+  						style="fill:none;stroke:orange;stroke-width:2" /> 
+
+  			<circle cx="80" cy="650" r="10" stroke="black" stroke-width="3" fill="red" /> 
+  			<text x="100" y="660" font-size="20"> Población Simple </text>
+
+  			<circle cx="80" cy="750" r="10" stroke="black" stroke-width="3" fill="green" /> 
+  			<text x="100" y="760" font-size="20"> Población Elitista </text>
+
+  			<circle cx="350" cy="650" r="10" stroke="black" stroke-width="3" fill="blue" /> 
+  			<text x="370" y="660" font-size="20"> Método Torneo </text>
+
+  			<circle cx="350" cy="750" r="10" stroke="black" stroke-width="3" fill="orange" /> 
+  			<text x="370" y="760" font-size="20"> Torneo y Elitista </text>
+		</svg>
+		
+		<script type="text/javascript" src="EliteTournament/AG_Func.js"></script>
+		<script type="text/javascript" src="Simple/AG.js"></script>
+		<script type="text/javascript" src="Elitism/AG.js"></script>
+		<script type="text/javascript" src="Tournament/AG.js"></script>
+		<script type="text/javascript" src="EliteTournament/AG.js"></script>
+	</body>
+</html>

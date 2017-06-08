@@ -79,7 +79,63 @@ function relative(fitness, generalFitness)
 	return relative;
 }
 
-function selection(individuals, individualsFitness){
+function bRelative(fitness, generalFitness)
+{
+	var relative = (fitness / generalFitness).toFixed(4);
+
+	return relative;
+}
+
+function selection(individuals, relativeFitness){
+
+	//El proceso de selección que se usará aquí sera el llamado: Método de la ruleta 
+
+	var accumulatedFitnessTotal = 0, randomNum, y, z=0;
+
+	var selectedOnes = [], accumulatedFitness = [];
+
+	var selected;
+
+	for (x in individuals) //Se genera una aptitud acumulada
+	{
+
+		accumulatedFitnessTotal += parseFloat(relativeFitness[x]);
+		accumulatedFitness[x] = accumulatedFitnessTotal;
+
+	}
+
+	for (x in individuals) //Se generan n cantidad de numeros aleatorios; donde n = Número de Ind.
+	{
+		//console.log("--------------------Selección----------------------");
+		y=0;
+		selected = false;
+		randomNum = Math.random();
+
+		do //Individuo por individuo se va checando que el número generado sea menor o mayor que la aptitud acumulada que tiene
+		{
+			//console.log("Comprobando que "+ randomNum.toFixed(4) + " sea menor que "+ accumulatedFitness[y]);
+
+			if (randomNum < accumulatedFitness[y])
+			{
+				//console.log("Verdadero, el individuo: "+ parseInt(y+1) +" ha sido seleccionado");
+				selectedOnes[z] = individuals[y]
+				z++;
+				selected = true;
+			}
+			else
+			{
+				//console.log("Falso");
+				y++;
+			}
+
+		} while(selected != true && y != individuals.length);
+	}
+
+	return selectedOnes;
+
+}
+
+function selectionTournament(individuals, individualsFitness){
 
 	//El proceso de selección que se usará aquí sera el llamado: Método del torneo
 

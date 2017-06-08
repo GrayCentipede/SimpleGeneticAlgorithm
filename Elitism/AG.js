@@ -95,9 +95,9 @@ do
 	for (x in individualsFitness)
 		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
 
-	var graphPoints = document.getElementById("Graphic").getAttribute("points");
+	var graphPoints = document.getElementById("GraphicElitism").getAttribute("points");
 	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
-	document.getElementById("Graphic").setAttribute("points", graphPoints);
+	document.getElementById("GraphicElitism").setAttribute("points", graphPoints);
 	
 	selectedOnes = selection(individuals, relativeFitness);
 

@@ -96,11 +96,11 @@ do
 	for (x in individualsFitness)
 		console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x]);
 
-	var graphPoints = document.getElementById("Graphic").getAttribute("points");
+	var graphPoints = document.getElementById("GraphicEliteTournament").getAttribute("points");
 	graphPoints += ""+ ((5*generation)+60) +" "+ (500 - (parseFloat(bestFitness)*10) +", ");
-	document.getElementById("Graphic").setAttribute("points", graphPoints);
+	document.getElementById("GraphicEliteTournament").setAttribute("points", graphPoints);
 
-	selectedOnes = selection(individuals, individualsFitness);
+	selectedOnes = selectionTournament(individuals, individualsFitness);
 
 	/*console.log("Cromosomas que pasaron la selección:");
 	for (x in selectedOnes)

@@ -54,7 +54,7 @@ function relative(fitness, generalFitness)
 	return relative;
 }
 
-function selection(individuals, individualsFitness){
+function selectionTournament(individuals, individualsFitness){
 
 	//El proceso de selección que se usará aquí sera el llamado: Método del torneo
 
