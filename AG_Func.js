@@ -24,11 +24,14 @@ function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para
 	return Math.ceil( Math.log2( (upperLim - lowerLim) * Math.pow(10,decimals) ) );
 }
 
-function mathematicalFunction(x,y){
-	return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
+function mathematicalFunction(x,y,type){
+	if (type==1)
+		return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
+	else
+		return ( -(21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y))) );
 }
 
-function fitness(individuals, xl, xu, yl, yu, size, xSize)
+function fitness(individuals, xl, xu, yl, yu, size, xSize, type)
 {
 	var fitness = [], genX = [], genY = [];
 
@@ -48,14 +51,14 @@ function fitness(individuals, xl, xu, yl, yu, size, xSize)
 		xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 		yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-		fitness[x] = mathematicalFunction(xi,yi);
+		fitness[x] = mathematicalFunction(xi,yi,type);
 		fitness[x] = fitness[x].toFixed(4);
 	}
 
 	return fitness;
 }
 
-function bFitness(individuals, xl, xu, yl, yu, size, xSize)
+function bFitness(individuals, xl, xu, yl, yu, size, xSize, type)
 {
 	var fitness = [], genX = [], genY = [];
 
@@ -73,7 +76,7 @@ function bFitness(individuals, xl, xu, yl, yu, size, xSize)
 	xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 	yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-	fitness = mathematicalFunction(xi,yi);
+	fitness = mathematicalFunction(xi,yi,type);
 	fitness = fitness.toFixed(4);
 
 	return fitness;
