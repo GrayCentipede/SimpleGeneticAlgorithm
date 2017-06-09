@@ -21,15 +21,23 @@
 
   			<polyline	id="GraphicElitism" 
   						points=""
-  						style="fill:none;stroke:green;stroke-width:1" /> 
+  						style="fill:none;stroke:green;stroke-width:1" />
 
-  			<polyline	id="GraphicTournament" 
+        <polyline id="GraphicTournament" 
+                points=""
+               style="fill:none;stroke:purple;stroke-width:1" />
+
+  			<polyline	id="GraphicPermutationTournament" 
   						points=""
   						style="fill:none;stroke:blue;stroke-width:1" /> 
 
   			<polyline	id="GraphicEliteTournament" 
   						points=""
   						style="fill:none;stroke:orange;stroke-width:1" />
+
+        <polyline id="GraphicClassicEliteTournament" 
+                points=""
+               style="fill:none;stroke:aqua;stroke-width:1" />
 
         <defs>
           <pattern id="smallGrid" width="5" height="5" patternUnits="userSpaceOnUse">
@@ -49,17 +57,23 @@
 
         <rect x="100" y="100" width="540" height="400" fill="url(#grid)" />
 
-  			<circle cx="80" cy="650" r="10" stroke="black" stroke-width="3" fill="red" /> 
+  			<circle id="Simple" cx="80" cy="650" r="10" stroke="black" stroke-width="3" fill="red" /> 
   			<text x="100" y="660" font-size="20"> Población Simple </text>
 
-  			<circle cx="80" cy="750" r="10" stroke="black" stroke-width="3" fill="green" /> 
+  			<circle id="Elitism" cx="80" cy="750" r="10" stroke="black" stroke-width="3" fill="green" /> 
   			<text x="100" y="760" font-size="20"> Población Elitista </text>
 
-  			<circle cx="350" cy="650" r="10" stroke="black" stroke-width="3" fill="blue" /> 
-  			<text x="370" y="660" font-size="20"> Método Torneo </text>
+  			<circle id="PermutationTournament" cx="350" cy="650" r="10" stroke="black" stroke-width="3" fill="blue" /> 
+  			<text x="370" y="660" font-size="20"> Método Torneo con Permutación</text>
 
-  			<circle cx="350" cy="750" r="10" stroke="black" stroke-width="3" fill="orange" /> 
+  			<circle id="EliteTournament" cx="350" cy="750" r="10" stroke="black" stroke-width="3" fill="orange" /> 
   			<text x="370" y="760" font-size="20"> Torneo y Elitista </text>
+
+        <circle id="Tournament" cx="80" cy="850" r="10" stroke="black" stroke-width="3" fill="purple" /> 
+        <text x="100" y="860" font-size="20"> Método de Torneo </text>
+
+        <circle id="ClassicEliteTournament" cx="350" cy="850" r="10" stroke="black" stroke-width="3" fill="aqua" /> 
+        <text x="370" y="860" font-size="20"> Método de Torneo Elitista </text>
 
         <text x="80" y="455" font-size="15"> 5 </text>
         <text x="70" y="403" font-size="15"> 10 </text>
@@ -82,10 +96,99 @@
         <text x="590" y="515" font-size="15"> 1000 </text>
 		</svg>
 		
-		<script type="text/javascript" src="EliteTournament/AG_Func.js"></script>
+		<script type="text/javascript" src="AG_Func.js"></script>
 		<script type="text/javascript" src="Simple/AG.js"></script>
 		<script type="text/javascript" src="Elitism/AG.js"></script>
-		<script type="text/javascript" src="Tournament/AG.js"></script>
+    <script type="text/javascript" src="ClassicTournament/AG.js"></script>
+		<script type="text/javascript" src="PermutationTournament/AG.js"></script>
 		<script type="text/javascript" src="EliteTournament/AG.js"></script>
+    <script type="text/javascript" src="ClassicEliteTournament/AG.js"></script>
+    <script>
+
+      document.getElementById("Simple").onclick = function ()
+      {
+        if(document.getElementById("GraphicSimple").style.visibility != "hidden")
+        {
+          document.getElementById("Simple").setAttribute("fill", "white");
+          document.getElementById("GraphicSimple").style.visibility = "hidden";
+        }
+        else
+        {
+          document.getElementById("Simple").setAttribute("fill", "red");
+          document.getElementById("GraphicSimple").style.visibility = "visible";
+        }
+      }
+
+      document.getElementById("Elitism").onclick = function ()
+      {
+        if(document.getElementById("GraphicElitism").style.visibility != "hidden")
+        {
+          document.getElementById("Elitism").setAttribute("fill", "white");
+          document.getElementById("GraphicElitism").style.visibility = "hidden";
+        }
+        else
+        {
+          document.getElementById("Elitism").setAttribute("fill", "green");
+          document.getElementById("GraphicElitism").style.visibility = "visible";
+        }
+      }
+
+      document.getElementById("PermutationTournament").onclick = function ()
+      {
+        if(document.getElementById("GraphicPermutationTournament").style.visibility != "hidden")
+        {
+          document.getElementById("PermutationTournament").setAttribute("fill", "white");
+          document.getElementById("GraphicPermutationTournament").style.visibility = "hidden";
+        }
+        else
+        {
+          document.getElementById("PermutationTournament").setAttribute("fill", "blue");
+          document.getElementById("GraphicPermutationTournament").style.visibility = "visible";
+        }
+      }
+
+      document.getElementById("Tournament").onclick = function ()
+      {
+        if(document.getElementById("GraphicTournament").style.visibility != "hidden")
+        {
+          document.getElementById("Tournament").setAttribute("fill", "white");
+          document.getElementById("GraphicTournament").style.visibility = "hidden";
+        }
+        else
+        {
+          document.getElementById("Tournament").setAttribute("fill", "purple");
+          document.getElementById("GraphicTournament").style.visibility = "visible";
+        }
+      }
+
+      document.getElementById("EliteTournament").onclick = function ()
+      {
+        if(document.getElementById("GraphicEliteTournament").style.visibility != "hidden")
+        {
+          document.getElementById("EliteTournament").setAttribute("fill", "white");
+          document.getElementById("GraphicEliteTournament").style.visibility = "hidden";
+        }
+        else
+        {
+          document.getElementById("EliteTournament").setAttribute("fill", "orange");
+          document.getElementById("GraphicEliteTournament").style.visibility = "visible";
+        }
+      }
+
+      document.getElementById("ClassicEliteTournament").onclick = function ()
+      {
+        if(document.getElementById("GraphicClassicEliteTournament").style.visibility != "hidden")
+        {
+          document.getElementById("ClassicEliteTournament").setAttribute("fill", "white");
+          document.getElementById("GraphicClassicEliteTournament").style.visibility = "hidden";
+        }
+        else
+        {
+          document.getElementById("ClassicEliteTournament").setAttribute("fill", "aqua");
+          document.getElementById("GraphicClassicEliteTournament").style.visibility = "visible";
+        }
+      }
+
+    </script>
 	</body>
 </html>

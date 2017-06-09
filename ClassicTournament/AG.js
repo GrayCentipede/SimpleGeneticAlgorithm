@@ -68,7 +68,6 @@ do
 
 	bestFitness = Math.max.apply(Math, individualsFitness);
 
-
 	if (generation%10 == 0)
 	{
 		var graphPoints = document.getElementById("GraphicTournament").getAttribute("points");
@@ -76,7 +75,7 @@ do
 		document.getElementById("GraphicTournament").setAttribute("points", graphPoints);
 	}
 
-	selectedOnes = selectionTournament(individuals, individualsFitness);
+	selectedOnes = selectionClassicTournament(individuals, individualsFitness);
 
 	/*console.log("Cromosomas que pasaron la selección:");
 	for (x in selectedOnes)

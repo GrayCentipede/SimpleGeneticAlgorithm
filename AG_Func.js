@@ -1,3 +1,24 @@
+function shuffle(array)
+{
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // Mientras todavía queden elementos que desordenar
+  while (0 !== currentIndex) 
+  {
+
+    // Escoge un elemento
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // Y lo intercambia con el actual
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
 function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para saber el tamaño del cromosoma
 { 
 	return Math.ceil( Math.log2( (upperLim - lowerLim) * Math.pow(10,decimals) ) );
@@ -34,6 +55,30 @@ function fitness(individuals, xl, xu, yl, yu, size, xSize)
 	return fitness;
 }
 
+function bFitness(individuals, xl, xu, yl, yu, size, xSize)
+{
+	var fitness = [], genX = [], genY = [];
+
+	var xDecimal, yDecimal;
+
+	for(x=0; x<xSize; x++)
+		genX[x] = individuals[x];
+
+	for(y=xSize; y<size; y++)
+		genY[y] = individuals[y];
+
+	xDecimal = parseInt( genX.join("") , 2);
+	yDecimal = parseInt( genY.join("") , 2);
+
+	xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
+	yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
+
+	fitness = mathematicalFunction(xi,yi);
+	fitness = fitness.toFixed(4);
+
+	return fitness;
+}
+
 function populationFitness(fitness)
 {
 	var generalFitness = 0;
@@ -50,6 +95,13 @@ function relative(fitness, generalFitness)
 
 	for(x in fitness)
 		relative[x] = (fitness[x] / generalFitness).toFixed(4);
+
+	return relative;
+}
+
+function bRelative(fitness, generalFitness)
+{
+	var relative = (fitness / generalFitness).toFixed(4);
 
 	return relative;
 }
@@ -97,6 +149,56 @@ function selection(individuals, relativeFitness){
 			}
 
 		} while(selected != true && y != individuals.length);
+	}
+
+	return selectedOnes;
+
+}
+
+function selectionTournament(individuals, individualsFitness){
+
+	//El proceso de selección que se usará aquí sera el llamado: Método del torneo
+
+	var selectedOnes = [];
+	var randomNum;
+
+	for (x in  individuals)
+	{
+		randomNum = Math.floor(Math.random() * individuals.length);
+		//console.log("Individuo "+ (x+1) +" competira con el individuo "+ (randomNum+1);
+		if (individualsFitness[x] >= individualsFitness[randomNum])
+			selectedOnes[x] = individuals[x];
+		else
+			selectedOnes[x] = individuals[randomNum];
+	}
+
+	return selectedOnes;
+
+}
+
+function selectionClassicTournament(individuals, individualsFitness)
+{
+
+	//El proceso de selección que se usará aquí sera el llamado: Método del Torneo.
+
+	var selectedOnes = [], competitors=[], randomizedOnes = [];
+	var randomNum;
+
+	randomizedOnes = individualsFitness.slice(0);
+
+	randomizedOnes = shuffle(randomizedOnes);
+
+	for (x in randomizedOnes)
+		for (y in individualsFitness)
+			if (randomizedOnes[x] == individualsFitness[y])
+				competitors[x] = y;
+
+	for (x in individualsFitness)
+	{
+		if (individualsFitness[x] >= individualsFitness[competitors[x]])
+			selectedOnes[x] = individuals[x]; 
+		else
+			selectedOnes[x] = individuals[competitors[x]];
 	}
 
 	return selectedOnes;
