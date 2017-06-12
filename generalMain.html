@@ -69,7 +69,7 @@
   		<text x="370" y="660" font-size="20"> Método Torneo con Permutación</text>
 
 			<circle id="EliteTournament" cx="350" cy="750" r="10" stroke="black" stroke-width="3" fill="orange" /> 
-  		<text x="370" y="760" font-size="20"> Torneo y Elitista </text>
+  		<text x="370" y="760" font-size="20"> Torneo con Permutación y Elitista </text>
 
       <circle id="Tournament" cx="80" cy="850" r="10" stroke="black" stroke-width="3" fill="purple" /> 
       <text x="100" y="860" font-size="20"> Método de Torneo </text>
@@ -192,11 +192,7 @@
       }
 
       document.getElementById("Max").addEventListener("click", function(){
-        if (generateS(1) != true)
-          if (generateE(1) != true)
-            if (generatePT(1) != true)
-              if (generateET(1) != true)
-                if (generateCT(1) != true)
+        if (generateS(1) != true && generateE(1) != true && generatePT(1) != true && generateET(1) != true && generateCT(1) != true)
                   generateCET(1);
       });
 

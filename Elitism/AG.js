@@ -118,7 +118,8 @@ function generateE(type)
 		{
 			console.log("Individuo "+(parseInt(x)+1)+"\n"+selectedOnes[x].join(""));
 		} */
-		chosenOnes = crossover(selectedOnes,PC);
+		//chosenOnes = crossover(selectedOnes,PC);
+		chosenOnes = crossoverUni(selectedOnes,PC);
 
 		/*for (x in chosenOnes)
 			console.log("Superviviente "+ (parseInt(x)+1) +": "+chosenOnes[x].join(""));*/

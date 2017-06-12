@@ -241,7 +241,7 @@ function crossover(selectedOnes, PC)
 
 	}
 
-	//console.log(chosenOnes);
+	console.log(chosenOnes);
 	for (x in selectedOnes)
 	{
 		chromosome[x] = selectedOnes[x].slice(0);
@@ -279,6 +279,74 @@ function crossover(selectedOnes, PC)
 		//Se reorganizan los cromosomas
 		chromosome[chosenOnes[n]] = chromosome[chosenOnes[n]].concat(mimicryX);
 		chromosome[chosenOnes[n+1]] = chromosome[chosenOnes[n+1]].concat(mimicryY);
+
+		//console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+
+		n += 2;
+		y++;
+
+		//Fin de la cruza entre parejas
+	}
+	
+	return chromosome;
+}
+
+function crossoverUni(selectedOnes, PC)
+{
+	//El método de cruza que se usará será el Uniforme
+	var randomNum, n=0, z=0, y=0;
+	var chosenOnes=[], chromosome = [], mask = [];
+
+	for (x in selectedOnes[0])
+	{
+		randomNum = Math.random();
+		if (randomNum >= 0.5)
+			mask[x] = 1;
+		else
+			mask[x] = 0;
+	}
+
+	//console.log("Mascara: \n"+mask.join(""));
+
+	for (x in selectedOnes)
+	{
+		randomNum = Math.random();
+		if (randomNum <= PC)
+		{
+			//De los individuos que se seleccionen se guardará la localidad que tienen para seguir teniendo un orden con los individuos
+			//console.log("Individuo "+ (parseInt(x)+1) +" ha sido elegido");
+			chosenOnes[z] = x;
+			z++;
+		}
+
+	}
+
+	//console.log(chosenOnes);
+	for (x in selectedOnes)
+	{
+		chromosome[x] = selectedOnes[x].slice(0);
+	}
+
+	size = chromosome[0].length;
+
+	//Se realiza la cruza entre cromosomas, siempre y cuando haya parejas, en caso de que no haya el cromosoma restante pasa sin haber sido cruzado
+	while(y < Math.floor(chosenOnes.length/2))
+	{	
+		//console.log("------------------------Cruza-----------------------");
+		//console.log("Cruza ocurre entre el individuo: "+ (parseInt(chosenOnes[n])+1) +" y el individuo "+ (parseInt(chosenOnes[n+1])+1) );
+
+		//console.log("Cromosomas orginales: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+
+		for (x in mask)
+		{
+			if (mask[x] == 1)
+			{
+				var a = chromosome[chosenOnes[n]][x];
+				chromosome[chosenOnes[n]][x] = chromosome[chosenOnes[n+1]][x];
+				chromosome[chosenOnes[n+1]][x] = a;
+			}
+		}
+		//Se cortan los respectivos trozos de la cadena y se guardan en las variables temporales mimicry 
 
 		//console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
 

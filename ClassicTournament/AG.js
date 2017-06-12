@@ -86,7 +86,9 @@ function generateCT(type)
 		{
 			console.log(selectedOnes[x].join(""));
 		} */
-		chosenOnes = crossover(selectedOnes,PC);
+		//chosenOnes = crossover(selectedOnes,PC);
+
+		chosenOnes = crossoverUni(selectedOnes,PC);
 
 		/* for (x in chosenOnes)
 			console.log("Supervivientes "+ (parseInt(x)+1) +": "+chosenOnes[x].join("")); */
