@@ -1,3 +1,5 @@
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, maxGenerations = 500, populSize = 50, PC = 0.75, PM = 0.015;
+
 function shuffle(array)
 {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -24,7 +26,8 @@ function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para
 	return Math.ceil( Math.log2( (upperLim - lowerLim) * Math.pow(10,decimals) ) );
 }
 
-function mathematicalFunction(x,y,type){
+function mathematicalFunction(x,y,type)
+{
 	if (type==1)
 		return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
 	else
@@ -119,13 +122,16 @@ function selection(individuals, relativeFitness){
 
 	var selected;
 
+
 	for (x in individuals) //Se genera una aptitud acumulada
 	{
 
 		accumulatedFitnessTotal += parseFloat(relativeFitness[x]);
 		accumulatedFitness[x] = accumulatedFitnessTotal;
-
 	}
+
+	console.log(accumulatedFitnessTotal);
+	console.log(individuals.length);
 
 	for (x in individuals) //Se generan n cantidad de numeros aleatorios; donde n = Número de Ind.
 	{
@@ -138,7 +144,7 @@ function selection(individuals, relativeFitness){
 		{
 			//console.log("Comprobando que "+ randomNum.toFixed(4) + " sea menor que "+ accumulatedFitness[y]);
 
-			if (randomNum < accumulatedFitness[y])
+			if (randomNum <= accumulatedFitness[y])
 			{
 				//console.log("Verdadero, el individuo: "+ parseInt(y+1) +" ha sido seleccionado");
 				selectedOnes[z] = individuals[y]
@@ -148,6 +154,13 @@ function selection(individuals, relativeFitness){
 			else
 			{
 				//console.log("Falso");
+				if (y == (individuals.length-1))
+				{
+					console.log("Bankrupt");
+					selectedOnes[z] = individuals[y]
+					z++;
+					selected = true;
+				}
 				y++;
 			}
 

@@ -17,13 +17,17 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 500, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015, bestFitness, worstFitness, bfLoc, wfLoc;
-
-var individuals = [], relativeFitness = [], selectedOnes = [], bestIndividual = [];
 
 // ------------------------------
 
-function generate(type){
+function generateE(type)
+{
+	var generation = 0, generalFitness = 0, bestFitness = 0, worstFitness = 0, bfLoc = 0, wfLoc = 0;
+
+	var individuals = [], relativeFitness = [], selectedOnes = [], bestIndividual = [];
+
+	document.getElementById("GraphicElitism").setAttribute("points", "");
+
 	xSize = genSize(xl,xu,decimals);
 	ySize = genSize(yl,yu,decimals);
 
@@ -77,11 +81,13 @@ function generate(type){
 				wfLoc = x;
 		}
 
-		if (Math.abs(bestFitnessZ) > Math.abs(worstFitness))
+		console.log("Peor aptitud: "+worstFitness+"del individuo "+wfLoc);
+
+		if (bestFitnessZ > worstFitness)
 		{
-			individuals[wfLoc] = bestIndividual;
-			individualsFitness[wfLoc] = bestFitnessZ;
-			relativeFitness[wfLoc] = bestRealitiveF;
+				individuals[wfLoc] = bestIndividual;
+				individualsFitness[wfLoc] = bestFitnessZ;
+				relativeFitness[wfLoc] = bestRealitiveF;
 		}
 
 		bestFitness = Math.max.apply(Math, individualsFitness);
@@ -92,6 +98,8 @@ function generate(type){
 		}
 
 		bestIndividual = individuals[bfLoc];
+
+		console.log("Aptitud que pasará: "+bestFitnessZ);
 
 		for (x in individualsFitness)
 			console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
@@ -105,15 +113,15 @@ function generate(type){
 		
 		selectedOnes = selection(individuals, relativeFitness);
 
-		console.log("Cromosomas que pasaron la selección:");
-		for (x in selectedOnes)
+		//console.log("Cromosomas que pasaron la selección:");
+		/*for (x in selectedOnes)
 		{
 			console.log("Individuo "+(parseInt(x)+1)+"\n"+selectedOnes[x].join(""));
-		} 
+		} */
 		chosenOnes = crossover(selectedOnes,PC);
 
-		for (x in chosenOnes)
-			console.log("Superviviente "+ (parseInt(x)+1) +": "+chosenOnes[x].join(""));
+		/*for (x in chosenOnes)
+			console.log("Superviviente "+ (parseInt(x)+1) +": "+chosenOnes[x].join(""));*/
 		individuals = mutation(chosenOnes,PM);
 
 		generation++;

@@ -98,7 +98,7 @@
       <text x="590" y="515" font-size="15"> 1000 </text>
 		</svg>
 		
-		<script type="text/javascript" src="AG_Func.js"></script>
+		<script type="text/javascript" src="AG_Global.js"></script>
 		<script type="text/javascript" src="Simple/AG.js"></script>
 		<script type="text/javascript" src="Elitism/AG.js"></script>
     <script type="text/javascript" src="ClassicTournament/AG.js"></script>
@@ -193,11 +193,20 @@
 
       document.getElementById("Max").addEventListener("click", function(){
         if (generateS(1) != true)
-          generateCET(1);
+          if (generateE(1) != true)
+            if (generatePT(1) != true)
+              if (generateET(1) != true)
+                if (generateCT(1) != true)
+                  generateCET(1);
       });
 
       document.getElementById("Min").addEventListener("click", function(){
-        generate(0);
+        if (generateS(0) != true)
+          if (generateE(0) != true)
+            if (generatePT(0) != true)
+              if (generateET(0) != true)
+                if (generateCT(0) != true)
+                  generateCET(0);
       });
 
     </script>

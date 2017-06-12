@@ -17,13 +17,16 @@ PASOS A SEGUIR PARA UN AG
 
 1.1 Codificación de las variables */
 
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, generation = 0, maxGenerations = 500, populSize = 25, generalFitness = 0, PC = 0.75, PM = 0.015;
-
-var individuals = [], selectedOnes = [], chosenOnes = [], bestIndividual = [];
-
 // ------------------------------
 
-function generate(type){
+function generateET(type)
+{
+	var generation = 0, generalFitness = 0;
+
+	var individuals = [], selectedOnes = [], chosenOnes = [], bestIndividual = [];
+
+	document.getElementById("GraphicEliteTournament").setAttribute("points", "");
+
 	xSize = genSize(xl,xu,decimals);
 	ySize = genSize(yl,yu,decimals);
 
