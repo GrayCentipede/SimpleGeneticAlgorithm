@@ -31,7 +31,7 @@ function mathematicalFunction(x,y,type)
 	if (type==1)
 		return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
 	else
-		return ( -(21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y))) );
+		return ( -( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin( 20 * Math.PI * y ) ) ) );
 }
 
 function fitness(individuals, xl, xu, yl, yu, size, xSize, type)
@@ -173,7 +173,7 @@ function selection(individuals, relativeFitness){
 
 function selectionTournament(individuals, individualsFitness){
 
-	//El proceso de selección que se usará aquí sera el llamado: Método del torneo
+	//El proceso de selección que se usará aquí sera el llamado: Método del Torneo con Permutación
 
 	var selectedOnes = [];
 	var randomNum;
@@ -181,11 +181,15 @@ function selectionTournament(individuals, individualsFitness){
 	for (x in  individuals)
 	{
 		randomNum = Math.floor(Math.random() * individuals.length);
-		//console.log("Individuo "+ (x+1) +" competira con el individuo "+ (randomNum+1);
-		if (individualsFitness[x] >= individualsFitness[randomNum])
+		console.log( "Individuo "+ (parseInt(x)+1) +" competira con el individuo "+ (randomNum+1) );
+		if (individualsFitness[x] >= individualsFitness[randomNum]){
+			console.log("Paso el individuo " + (parseInt(x)+1));
 			selectedOnes[x] = individuals[x];
-		else
+		}
+		else{
+			console.log("Paso el individuo " + (randomNum+1));
 			selectedOnes[x] = individuals[randomNum];
+		}
 	}
 
 	return selectedOnes;
@@ -209,12 +213,20 @@ function selectionClassicTournament(individuals, individualsFitness)
 			if (randomizedOnes[x] == individualsFitness[y])
 				competitors[x] = y;
 
+	for ( x in competitors)
+		console.log(competitors[x]);
+
 	for (x in individualsFitness)
 	{
-		if (individualsFitness[x] >= individualsFitness[competitors[x]])
+		console.log("Individuo " + (parseInt(x)+1) + " v.s. Individuo "+ (parseInt(competitors[x])+1) );
+		if (individualsFitness[x] >= individualsFitness[competitors[x]]){
+			console.log("Individuo "+ (parseInt(x)+1) +" ganó");
 			selectedOnes[x] = individuals[x]; 
-		else
+		}
+		else{
+			console.log("Individuo "+ (parseInt(competitors[x])+1) +" ganó");
 			selectedOnes[x] = individuals[competitors[x]];
+		}
 	}
 
 	return selectedOnes;
@@ -227,21 +239,6 @@ function crossover(selectedOnes, PC)
 	var randomNum, y=0, z = 0, n=0, size;
 	var chosenOnes = [], chromosome = [], mimicryX = [], mimicryY = [];
 
-	//Se genera un número aleatorio y dependiendo de si este número es menor a la Probablididad de cruza se escogera al individuo
-	for (x in selectedOnes)
-	{
-		randomNum = Math.random();
-		if (randomNum <= PC)
-		{
-			//De los individuos que se seleccionen se guardará la localidad que tienen para seguir teniendo un orden con los individuos
-			//console.log("Individuo "+ (parseInt(x)+1) +" ha sido elegido");
-			chosenOnes[z] = x;
-			z++;
-		}
-
-	}
-
-	console.log(chosenOnes);
 	for (x in selectedOnes)
 	{
 		chromosome[x] = selectedOnes[x].slice(0);
@@ -250,37 +247,44 @@ function crossover(selectedOnes, PC)
 	size = chromosome[0].length;
 
 	//Se realiza la cruza entre cromosomas, siempre y cuando haya parejas, en caso de que no haya el cromosoma restante pasa sin haber sido cruzado
-	while(y < Math.floor(chosenOnes.length/2))
+	while(y < Math.floor(chromosome.length/2))
 	{	
 		//console.log("------------------------Cruza-----------------------");
-		//console.log("Cruza ocurre entre el individuo: "+ (parseInt(chosenOnes[n])+1) +" y el individuo "+ (parseInt(chosenOnes[n+1])+1) );
-		
-		//Se generará un número aleatorio que indicará desde donde será cortada la cadena de bits
-		randomNum = Math.floor(Math.random() * (size-1)) + 1;
 
-		//console.log("Numero elegido: "+ randomNum);
+		//Se genera un número aleatorio y dependiendo de si este número es menor a la Probablididad de cruza se escogera a la pareja para que se crucen
+		randomNum = Math.random();
 
-		//console.log("Cromosomas orginales: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+		if ( randomNum <= PC )
+		{
+			//console.log("Cruza ocurre entre el individuo: "+ (parseInt(chosenOnes[n])+1) +" y el individuo "+ (parseInt(chosenOnes[n+1])+1) );
+			
+			//Se generará un número aleatorio que indicará desde donde será cortada la cadena de bits
+			randomNum = Math.floor(Math.random() * (size-1)) + 1;
 
-		//Se cortan los respectivos trozos de la cadena y se guardan en las variables temporales mimicry 
-		mimicryX = chromosome[chosenOnes[n]].splice(randomNum);
-		mimicryY = chromosome[chosenOnes[n+1]].splice(randomNum);
+			//console.log("Numero elegido: "+ randomNum);
 
-		/*Intercambio de Bits 
-		Se crea una variable temporal que almacene los datos de X */
-		var temporal = mimicryX;
+			//console.log("Cromosomas orginales: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
 
-		// X toma todos los elementos/bits de Y 
-		mimicryX = mimicryY;
+			//Se cortan los respectivos trozos de la cadena y se guardan en las variables temporales mimicry 
+			mimicryX = chromosome[chosenOnes[n]].splice(randomNum);
+			mimicryY = chromosome[chosenOnes[n+1]].splice(randomNum);
 
-		// Y toma todos los elementos/bits de temporal la cual tiene los datos de X 
-		mimicryY = temporal;
+			/*Intercambio de Bits 
+			Se crea una variable temporal que almacene los datos de X */
+			var temporal = mimicryX;
 
-		//Se reorganizan los cromosomas
-		chromosome[chosenOnes[n]] = chromosome[chosenOnes[n]].concat(mimicryX);
-		chromosome[chosenOnes[n+1]] = chromosome[chosenOnes[n+1]].concat(mimicryY);
+			// X toma todos los elementos/bits de Y 
+			mimicryX = mimicryY;
 
-		//console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+			// Y toma todos los elementos/bits de temporal la cual tiene los datos de X 
+			mimicryY = temporal;
+
+			//Se reorganizan los cromosomas
+			chromosome[chosenOnes[n]] = chromosome[chosenOnes[n]].concat(mimicryX);
+			chromosome[chosenOnes[n+1]] = chromosome[chosenOnes[n+1]].concat(mimicryY);
+		}
+
+			//console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
 
 		n += 2;
 		y++;
@@ -310,45 +314,37 @@ function crossoverUni(selectedOnes, PC)
 
 	for (x in selectedOnes)
 	{
-		randomNum = Math.random();
-		if (randomNum <= PC)
-		{
-			//De los individuos que se seleccionen se guardará la localidad que tienen para seguir teniendo un orden con los individuos
-			//console.log("Individuo "+ (parseInt(x)+1) +" ha sido elegido");
-			chosenOnes[z] = x;
-			z++;
-		}
-
-	}
-
-	//console.log(chosenOnes);
-	for (x in selectedOnes)
-	{
 		chromosome[x] = selectedOnes[x].slice(0);
 	}
 
-	size = chromosome[0].length;
+	//console.log(Math.floor(chromosome.length/2));
 
 	//Se realiza la cruza entre cromosomas, siempre y cuando haya parejas, en caso de que no haya el cromosoma restante pasa sin haber sido cruzado
-	while(y < Math.floor(chosenOnes.length/2))
+	while( y < Math.floor(chromosome.length/2) )
 	{	
 		//console.log("------------------------Cruza-----------------------");
-		//console.log("Cruza ocurre entre el individuo: "+ (parseInt(chosenOnes[n])+1) +" y el individuo "+ (parseInt(chosenOnes[n+1])+1) );
 
-		//console.log("Cromosomas orginales: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+		randomNum = Math.random();
 
-		for (x in mask)
+		if (randomNum <= PC)
 		{
-			if (mask[x] == 1)
-			{
-				var a = chromosome[chosenOnes[n]][x];
-				chromosome[chosenOnes[n]][x] = chromosome[chosenOnes[n+1]][x];
-				chromosome[chosenOnes[n+1]][x] = a;
-			}
-		}
-		//Se cortan los respectivos trozos de la cadena y se guardan en las variables temporales mimicry 
+			//console.log("Cruza ocurre entre el individuo: "+ n +" y el individuo "+ (n+1) );
 
-		//console.log("Cromosomas alterados: \n"+ chromosome[chosenOnes[n]].join("")+"\n"+chromosome[chosenOnes[n+1]].join(""));
+			//console.log("Cromosomas orginales: \n"+ chromosome[n].join("")+"\n"+chromosome[n+1].join("") );
+
+			for (x in mask)
+			{
+				if (mask[x] == 1)
+				{
+					var a = chromosome[n][x];
+					chromosome[n][x] = chromosome[n+1][x];
+					chromosome[n+1][x] = a;
+				}
+			}
+			//Se cortan los respectivos trozos de la cadena y se guardan en las variables temporales mimicry 
+
+			//console.log("Cromosomas alterados: \n"+ chromosome[n].join("")+"\n"+chromosome[n+1].join("") );
+		}
 
 		n += 2;
 		y++;

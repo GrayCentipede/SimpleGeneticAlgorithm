@@ -86,7 +86,6 @@ function generatePT(type)
 		{
 			console.log(selectedOnes[x].join(""));
 		} */
-		//chosenOnes = crossover(selectedOnes,PC);
 
 		chosenOnes = crossoverUni(selectedOnes,PC);
 
