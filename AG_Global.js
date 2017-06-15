@@ -1,4 +1,11 @@
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, maxGenerations = 500, populSize = 50, PC = 0.75, PM = 0.015;
+var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, maxGenerations = 500, populSize = 25, PC = 0.75, PM = 0.015;
+
+xSize = genSize(xl,xu,decimals);
+ySize = genSize(yl,yu,decimals);
+
+chromosomeSize = xSize + ySize;
+
+console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromosoma: "+chromosomeSize);
 
 function shuffle(array)
 {
@@ -31,10 +38,10 @@ function mathematicalFunction(x,y,type)
 	if (type==1)
 		return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
 	else
-		return ( -( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin( 20 * Math.PI * y ) ) ) );
+		return ( 1/( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin( 20 * Math.PI * y ) ) ) );
 }
 
-function fitness(individuals, xl, xu, yl, yu, size, xSize, type)
+function fitness(individuals, type)
 {
 	var fitness = [], genX = [], genY = [];
 
@@ -45,7 +52,7 @@ function fitness(individuals, xl, xu, yl, yu, size, xSize, type)
 		for(y=0; y<xSize; y++)
 			genX[y] = individuals[x][y];
 
-		for(z=xSize; z<size; z++)
+		for(z=xSize; z<chromosomeSize; z++)
 			genY[z] = individuals[x][z];
 
 		xDecimal = parseInt( genX.join("") , 2);
@@ -55,13 +62,13 @@ function fitness(individuals, xl, xu, yl, yu, size, xSize, type)
 		yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
 		fitness[x] = mathematicalFunction(xi,yi,type);
-		fitness[x] = fitness[x].toFixed(4);
+		fitness[x] = fitness[x];
 	}
 
 	return fitness;
 }
 
-function bFitness(individuals, xl, xu, yl, yu, size, xSize, type)
+function bFitness(individuals, type)
 {
 	var fitness = [], genX = [], genY = [];
 
@@ -70,7 +77,7 @@ function bFitness(individuals, xl, xu, yl, yu, size, xSize, type)
 	for(x=0; x<xSize; x++)
 		genX[x] = individuals[x];
 
-	for(y=xSize; y<size; y++)
+	for(y=xSize; y<chromosomeSize; y++)
 		genY[y] = individuals[y];
 
 	xDecimal = parseInt( genX.join("") , 2);
@@ -80,7 +87,6 @@ function bFitness(individuals, xl, xu, yl, yu, size, xSize, type)
 	yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
 	fitness = mathematicalFunction(xi,yi,type);
-	fitness = fitness.toFixed(4);
 
 	return fitness;
 }
@@ -90,7 +96,7 @@ function populationFitness(fitness)
 	var generalFitness = 0;
 
 	for (x in fitness)
-		generalFitness += parseInt(fitness[x]);
+		generalFitness += fitness[x];
 
 	return generalFitness;
 }
@@ -100,14 +106,14 @@ function relative(fitness, generalFitness)
 	var relative = [];
 
 	for(x in fitness)
-		relative[x] = (fitness[x] / generalFitness).toFixed(4);
+		relative[x] = (fitness[x] / generalFitness);
 
 	return relative;
 }
 
 function bRelative(fitness, generalFitness)
 {
-	var relative = (fitness / generalFitness).toFixed(4);
+	var relative = (fitness / generalFitness);
 
 	return relative;
 }
@@ -131,7 +137,6 @@ function selection(individuals, relativeFitness){
 	}
 
 	console.log(accumulatedFitnessTotal);
-	console.log(individuals.length);
 
 	for (x in individuals) //Se generan n cantidad de numeros aleatorios; donde n = Número de Ind.
 	{
@@ -142,7 +147,7 @@ function selection(individuals, relativeFitness){
 
 		do //Individuo por individuo se va checando que el número generado sea menor o mayor que la aptitud acumulada que tiene
 		{
-			//console.log("Comprobando que "+ randomNum.toFixed(4) + " sea menor que "+ accumulatedFitness[y]);
+			//console.log("Comprobando que "+ (randomNum*100) + "% sea menor que "+ (accumulatedFitness[y])*100+"%");
 
 			if (randomNum <= accumulatedFitness[y])
 			{

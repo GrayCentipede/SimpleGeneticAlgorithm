@@ -192,17 +192,21 @@
       }
 
       document.getElementById("Max").addEventListener("click", function(){
-        if (generateS(1) != true && generateE(1) != true && generatePT(1) != true && generateET(1) != true && generateCT(1) != true)
-                  generateCET(1);
+          generateS(1);
+          generateE(1);
+          generateCT(1);
+          generatePT(1);
+          generateCET(1);
+          generateET(1);
       });
 
       document.getElementById("Min").addEventListener("click", function(){
-        if (generateS(0) != true)
-          if (generateE(0) != true)
-            if (generatePT(0) != true)
-              if (generateET(0) != true)
-                if (generateCT(0) != true)
-                  generateCET(0);
+          generateS(0);
+          generateE(0);
+          generateCT(0);
+          generatePT(0);
+          generateCET(0);
+          generateET(0);
       });
 
     </script>

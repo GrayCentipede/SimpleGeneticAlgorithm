@@ -27,14 +27,6 @@ function generateET(type)
 
 	document.getElementById("GraphicEliteTournament").setAttribute("points", "");
 
-	xSize = genSize(xl,xu,decimals);
-	ySize = genSize(yl,yu,decimals);
-
-	var chromosomeSize = xSize + ySize;
-
-
-	console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromosoma: "+chromosomeSize);
-
 	//1.2 Generar a la población inicial
 
 	for (var x=0; x<populSize; x++) // They're ALIVE!!!
@@ -56,18 +48,15 @@ function generateET(type)
 
 		console.log("------------------ Población --------------------");
 
-		for (x in individuals)
-			console.log("Individuo "+ (parseInt(x)+1) +": "+individuals[x].join(""));
-
-		individualsFitness = fitness(individuals, xl, xu, yl, yu, chromosomeSize, xSize, type);
+		individualsFitness = fitness(individuals, type);
 
 		generalFitness = populationFitness(individualsFitness);
 
-		bestFitnessZ = bFitness(bestIndividual, xl, xu, yl, yu, chromosomeSize, xSize, type);
-
-		console.log("Aptitud que pasó: "+bestFitnessZ);
+		bestFitnessZ = bFitness(bestIndividual, type);
 
 		console.log("Aptitud de la Generación: "+generalFitness);
+
+		console.log("Aptitud que pasó: "+bestFitnessZ);
 
 		worstFitness = Math.min.apply(Math, individualsFitness);
 		for (x in individualsFitness)
@@ -91,14 +80,11 @@ function generateET(type)
 
 		bestIndividual = individuals[bfLoc];
 
-		for (x in individualsFitness)
-			console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x]);
-
 
 		console.log("Aptitud de la Generación: "+generalFitness);
 
 		for (x in individualsFitness)
-			console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x]);
+			console.log("Individuo "+ (parseInt(x)+1) +": \n"+individuals[x].join("")+"\n Aptitud del individuo: "+ individualsFitness[x].toFixed(4));
 
 		if (generation%10 == 0)
 		{

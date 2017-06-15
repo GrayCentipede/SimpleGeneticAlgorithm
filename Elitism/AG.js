@@ -28,14 +28,6 @@ function generateE(type)
 
 	document.getElementById("GraphicElitism").setAttribute("points", "");
 
-	xSize = genSize(xl,xu,decimals);
-	ySize = genSize(yl,yu,decimals);
-
-	var chromosomeSize = xSize + ySize
-
-
-	console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromosoma: "+chromosomeSize);
-
 	//1.2 Generar a la población inicial
 
 	for (var x=0; x<populSize; x++) // They're ALIVE!!!
@@ -57,20 +49,15 @@ function generateE(type)
 
 		console.log("------------------ Población --------------------");
 
-		for (x in individuals)
-			console.log("Individuo "+ (parseInt(x)+1) +": "+individuals[x].join(""));
-
-		individualsFitness = fitness(individuals, xl, xu, yl, yu, chromosomeSize, xSize, type);
+		individualsFitness = fitness(individuals, type);
 
 		generalFitness = populationFitness(individualsFitness);
 
 		relativeFitness = relative(individualsFitness, generalFitness);
 
-		bestFitnessZ = bFitness(bestIndividual, xl, xu, yl, yu, chromosomeSize, xSize, type);
+		bestFitnessZ = bFitness(bestIndividual, type);
 
 		bestRealitiveF = bRelative(bestFitnessZ, generalFitness);
-
-		console.log("Aptitud que pasó: "+bestFitnessZ);
 
 		console.log("Aptitud de la Generación: "+generalFitness);
 
@@ -80,6 +67,7 @@ function generateE(type)
 			if (worstFitness == individualsFitness[x])
 				wfLoc = x;
 		}
+		console.log("Aptitud que pasó: "+bestFitnessZ);
 
 		console.log("Peor aptitud: "+worstFitness+"del individuo "+wfLoc);
 
@@ -102,7 +90,7 @@ function generateE(type)
 		console.log("Aptitud que pasará: "+bestFitnessZ);
 
 		for (x in individualsFitness)
-			console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x] +"\n Aptitud relativa: "+ relativeFitness[x]);
+			console.log("Individuo "+ (parseInt(x)+1) +": \n"+individuals[x].join("")+"\n Aptitud del individuo: "+ individualsFitness[x].toFixed(4) +"\n Aptitud relativa: "+ (relativeFitness[x].toFixed(4))*100 + "%" );
 
 		if (generation%10 == 0)
 		{

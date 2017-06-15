@@ -24,15 +24,8 @@ var individuals = [], relativeFitness = [], selectedOnes = [];
 function generatePT(type)
 {
 	var generation = 0, bestFitness = 0, generalFitness = 0;
+
 	document.getElementById("GraphicPermutationTournament").setAttribute("points", "");
-
-	xSize = genSize(xl,xu,decimals);
-	ySize = genSize(yl,yu,decimals);
-
-	var chromosomeSize = xSize + ySize
-
-
-	console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromosoma: "+chromosomeSize);
 
 	//1.2 Generar a la población inicial
 
@@ -55,10 +48,7 @@ function generatePT(type)
 
 		console.log("------------------ Población --------------------");
 
-		for (x in individuals)
-			console.log("Individuo "+ (parseInt(x)+1) +": "+individuals[x].join(""));
-
-		individualsFitness = fitness(individuals, xl, xu, yl, yu, chromosomeSize, xSize, type);
+		individualsFitness = fitness(individuals, type);
 
 		generalFitness = populationFitness(individualsFitness);
 
@@ -67,7 +57,7 @@ function generatePT(type)
 		console.log("Aptitud de la Generación: "+generalFitness);
 
 		for (x in individualsFitness)
-			console.log("Aptitud del individuo: "+ (parseInt(x)+1) +": "+ individualsFitness[x]);
+			console.log("Individuo "+ (parseInt(x)+1) +": \n"+individuals[x].join("")+"\n Aptitud del individuo: "+ individualsFitness[x].toFixed(4));
 
 		bestFitness = Math.max.apply(Math, individualsFitness);
 
