@@ -35,10 +35,35 @@ function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para
 
 function mathematicalFunction(x,y,type)
 {
+	var f = ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
 	if (type==1)
-		return ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
+		return f;
 	else
-		return ( 1/( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin( 20 * Math.PI * y ) ) ) );
+		return ( 1 / f );
+}
+
+function ackleyFunction(x,y,type) 
+{
+	var f = ( -20 * Math.exp( -0.2 * Math.sqrt( 0.5 * (Math.pow(x,2) + Math.pow(y,2) ) ) ) ) - Math.exp( 0.5 * ( Math.cos( 2 * Math.PI * x) + Math.cos( 2 * Math.PI * y ) ) ) + Math.E + 20;
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;
+}
+
+function sphereFunction(x,y,type)
+{
+	var f = 0, n=10;
+	for (var z = 0; z<=n; z++)
+	{
+		f += Math.pow(x,2);
+	}
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;
+
 }
 
 function fitness(individuals, type)
