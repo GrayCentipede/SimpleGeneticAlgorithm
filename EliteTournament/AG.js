@@ -86,6 +86,9 @@ function generateET(type)
 		for (x in individualsFitness)
 			console.log("Individuo "+ (parseInt(x)+1) +": \n"+individuals[x].join("")+"\n Aptitud del individuo: "+ individualsFitness[x].toFixed(4));
 
+		if (type == 0)
+			bestFitness = 1/bestFitness;
+
 		if (generation%10 == 0)
 		{
 			var graphPoints = document.getElementById("GraphicEliteTournament").getAttribute("points");
@@ -110,4 +113,5 @@ function generateET(type)
 
 		generation++;
 	} while (generation <= maxGenerations);
+	document.getElementById("valueET").textContent= "f(x,y) = "+bestFitness.toFixed(4);
 }

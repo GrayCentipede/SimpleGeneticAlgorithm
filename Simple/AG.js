@@ -61,10 +61,16 @@ function generateS(type){
 
 		bestFitness = Math.max.apply(Math, individualsFitness);
 
+		if (type == 0)
+			if (bestFitness != 0)
+				bestFitness = 1/bestFitness;
+			else
+				bestFitness = 0;
+
 		if (generation%10 == 0)
 		{
 			var graphPoints = document.getElementById("GraphicSimple").getAttribute("points");
-			graphPoints += ""+  (5*(generation/10)+100) +" "+ (500 - (Math.abs(parseFloat(bestFitness)*10))) +", ";
+			graphPoints += ""+  (5*(generation/10)+100) +" "+ (500 - (parseFloat(bestFitness)*10)) +", ";
 			document.getElementById("GraphicSimple").setAttribute("points", graphPoints);
 		}
 
@@ -86,4 +92,5 @@ function generateS(type){
 
 		generation++;
 	} while (generation <= maxGenerations);
+	document.getElementById("valueSimple").textContent= "f(x,y) = "+bestFitness.toFixed(4);
 }

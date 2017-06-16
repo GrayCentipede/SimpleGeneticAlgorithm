@@ -1,4 +1,12 @@
-var xl = -3, xu = 12.1, yl = 4.1, yu = 5.8, decimals = 4, maxGenerations = 500, populSize = 25, PC = 0.75, PM = 0.015;
+var decimals = 4, maxGenerations = 500, populSize = 25, PC = 0.9, PM = 0.015;
+
+//var xl = -3, xu = 12.1, yl = -4.1, yu = 5.8; //Función prueba
+//var xl = -5.12, xu = 5.12, yl = -5.12, yu = 5.12; // Rastrigin
+//var xl = -5, xu = 5, yl = -5, yu = 5; //Ackley
+//var xl = -10, xu = 10, yl = -10, yu = 10; //Esfera
+//var xl = -4.5, xu = 4.5, yl = -4.5, yu = 4.5; //Baele
+var xl = -2, xu = 2, yl = -2, yu = 2; //Función Goldstein-Price
+//var xl = -10, xu = 10, yl = -10, yu = 10; //Booth 
 
 xSize = genSize(xl,xu,decimals);
 ySize = genSize(yl,yu,decimals);
@@ -17,7 +25,7 @@ function shuffle(array)
 
     // Escoge un elemento
     randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+    currentIndex -= 1; 
 
     // Y lo intercambia con el actual
     temporaryValue = array[currentIndex];
@@ -42,6 +50,23 @@ function mathematicalFunction(x,y,type)
 		return ( 1 / f );
 }
 
+function rastriginFunction(x,y,type)
+{
+	var A = 10, n= 2, sum = 0;
+
+	for (var z = 1; z<=n; z++)
+	{
+		sum += Math.pow(x,2) - ( A * Math.cos(2*Math.PI*x) );
+	}
+
+	var f = (A*n) + sum;
+
+	if (type==1)
+		return f;
+	else
+		return (1/f);
+}
+
 function ackleyFunction(x,y,type) 
 {
 	var f = ( -20 * Math.exp( -0.2 * Math.sqrt( 0.5 * (Math.pow(x,2) + Math.pow(y,2) ) ) ) ) - Math.exp( 0.5 * ( Math.cos( 2 * Math.PI * x) + Math.cos( 2 * Math.PI * y ) ) ) + Math.E + 20;
@@ -53,7 +78,7 @@ function ackleyFunction(x,y,type)
 
 function sphereFunction(x,y,type)
 {
-	var f = 0, n=10;
+	var f = 0, n=2;
 	for (var z = 0; z<=n; z++)
 	{
 		f += Math.pow(x,2);
@@ -64,6 +89,36 @@ function sphereFunction(x,y,type)
 	else
 		return 1/ f;
 
+}
+
+function baeleFunction(x,y,type)
+{
+	var f = Math.pow((1.5 - x + (x*y) ),2) + Math.pow( (2.25 - x + ( x * Math.pow(y,2) ) ), 2 ) + Math.pow( (2.625 - x + ( x * Math.pow(y,3) ) ) , 2);
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;
+}
+
+function goldsteinPriceFunction(x,y,type)
+{
+	var f = ( 1 + ( Math.pow( (x+y+1) , 2) ) * (19 -(14*x) + (3 * Math.pow(x,2)) - (14*y) + (6*x*y) + (3 * Math.pow(y,2) ) ) ) * ( 30 + Math.pow( ( (2*x) - (3*y) ) , 2 ) * ( 18 - (32*x) + ( 12 * Math.pow(x,2) ) + (48 * y) - (36*x*y) + (27*Math.pow(y,2) ) ) );
+
+	if (type == 1)
+		return f;
+	else
+		return 1 / f;
+}
+
+function boothFunction(x,y,type)
+{
+	var f = Math.pow( (x+(2*y)-7) , 2) + Math.pow(((2*x)+y-5),2);
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;
 }
 
 function fitness(individuals, type)
@@ -86,7 +141,7 @@ function fitness(individuals, type)
 		xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 		yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-		fitness[x] = mathematicalFunction(xi,yi,type);
+		fitness[x] = goldsteinPriceFunction(xi,yi,type);
 		fitness[x] = fitness[x];
 	}
 
@@ -111,7 +166,7 @@ function bFitness(individuals, type)
 	xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 	yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-	fitness = mathematicalFunction(xi,yi,type);
+	fitness = goldsteinPriceFunction(xi,yi,type);
 
 	return fitness;
 }

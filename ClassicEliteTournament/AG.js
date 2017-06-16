@@ -88,6 +88,9 @@ function generateCET(type)
 		for (x in individualsFitness)
 			console.log("Individuo "+ (parseInt(x)+1) +": \n"+individuals[x].join("")+"\n Aptitud del individuo: "+ individualsFitness[x].toFixed(4) );
 
+		if (type == 0)
+			bestFitness = 1/bestFitness;
+
 		if (generation%10 == 0)
 		{
 			var graphPoints = document.getElementById("GraphicClassicEliteTournament").getAttribute("points");
@@ -112,4 +115,5 @@ function generateCET(type)
 
 		generation++;
 	} while (generation <= maxGenerations);
+	document.getElementById("valueCET").textContent= "f(x,y) = "+bestFitness.toFixed(4);
 }

@@ -61,6 +61,9 @@ function generateCT(type)
 
 		bestFitness = Math.max.apply(Math, individualsFitness);
 
+		if (type == 0)
+			bestFitness = 1/bestFitness;
+
 		if (generation%10 == 0)
 		{
 			var graphPoints = document.getElementById("GraphicTournament").getAttribute("points");
@@ -86,4 +89,5 @@ function generateCT(type)
 
 		generation++;
 	} while (generation <= maxGenerations);
+	document.getElementById("valueCT").textContent= "f(x,y) = "+bestFitness.toFixed(4);
 }

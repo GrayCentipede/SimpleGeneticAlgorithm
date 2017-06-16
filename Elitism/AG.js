@@ -92,6 +92,9 @@ function generateE(type)
 		for (x in individualsFitness)
 			console.log("Individuo "+ (parseInt(x)+1) +": \n"+individuals[x].join("")+"\n Aptitud del individuo: "+ individualsFitness[x].toFixed(4) +"\n Aptitud relativa: "+ (relativeFitness[x].toFixed(4))*100 + "%" );
 
+		if (type == 0)
+			bestFitness = 1/bestFitness;
+
 		if (generation%10 == 0)
 		{
 			var graphPoints = document.getElementById("GraphicElitism").getAttribute("points");
@@ -115,4 +118,5 @@ function generateE(type)
 
 		generation++;
 	} while (generation <= maxGenerations);
+	document.getElementById("valueE").textContent= "f(x,y) = "+bestFitness.toFixed(4);
 }

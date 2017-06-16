@@ -61,6 +61,9 @@ function generatePT(type)
 
 		bestFitness = Math.max.apply(Math, individualsFitness);
 
+		if (type == 0)
+			bestFitness = 1/bestFitness;
+
 
 		if (generation%10 == 0)
 		{
@@ -86,4 +89,5 @@ function generatePT(type)
 
 		generation++;
 	} while (generation <= maxGenerations);
+	document.getElementById("valuePT").textContent= "f(x,y) = "+bestFitness.toFixed(4);
 }
