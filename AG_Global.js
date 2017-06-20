@@ -3,10 +3,16 @@ var decimals = 4, maxGenerations = 500, populSize = 25, PC = 0.9, PM = 0.015;
 //var xl = -3, xu = 12.1, yl = -4.1, yu = 5.8; //Función prueba
 //var xl = -5.12, xu = 5.12, yl = -5.12, yu = 5.12; // Rastrigin
 //var xl = -5, xu = 5, yl = -5, yu = 5; //Ackley
-//var xl = -10, xu = 10, yl = -10, yu = 10; //Esfera
+//var xl = -10, xu = 10, yl = -10, yu = 10; //Esfera 
+//var xl = -10, xu = 10, yl = -10, yu = 10; //Rosenbrock
 //var xl = -4.5, xu = 4.5, yl = -4.5, yu = 4.5; //Baele
-var xl = -2, xu = 2, yl = -2, yu = 2; //Función Goldstein-Price
-//var xl = -10, xu = 10, yl = -10, yu = 10; //Booth 
+//var xl = -2, xu = 2, yl = -2, yu = 2; //Función Goldstein-Price
+//var xl = -10, xu = 10, yl = -10, yu = 10; //Booth
+var xl = -10, xu = 10, yl = -10, yu = 10; //Levi 
+//var xl = -100, xu = 100, yl = -100, yu = 100; //Easom *
+//var xl = -10, xu = 10, yl = -10, yu = 10; //Cross in tray 
+//var xl = -512, xu = 512, yl = -512, yu = 512; //Eggholder *
+
 
 xSize = genSize(xl,xu,decimals);
 ySize = genSize(yl,yu,decimals);
@@ -59,7 +65,7 @@ function rastriginFunction(x,y,type)
 		sum += Math.pow(x,2) - ( A * Math.cos(2*Math.PI*x) );
 	}
 
-	var f = (A*n) + sum;
+	var f = (A*n) + sum + 1;
 
 	if (type==1)
 		return f;
@@ -69,7 +75,7 @@ function rastriginFunction(x,y,type)
 
 function ackleyFunction(x,y,type) 
 {
-	var f = ( -20 * Math.exp( -0.2 * Math.sqrt( 0.5 * (Math.pow(x,2) + Math.pow(y,2) ) ) ) ) - Math.exp( 0.5 * ( Math.cos( 2 * Math.PI * x) + Math.cos( 2 * Math.PI * y ) ) ) + Math.E + 20;
+	var f = ( -20 * Math.exp( -0.2 * Math.sqrt( 0.5 * (Math.pow(x,2) + Math.pow(y,2) ) ) ) ) - Math.exp( 0.5 * ( Math.cos( 2 * Math.PI * x) + Math.cos( 2 * Math.PI * y ) ) ) + Math.E + 20 + 1;
 	if (type == 1)
 		return f;
 	else
@@ -79,7 +85,7 @@ function ackleyFunction(x,y,type)
 function sphereFunction(x,y,type)
 {
 	var f = 0, n=2;
-	for (var z = 0; z<=n; z++)
+	for (var z = 1; z<=n; z++)
 	{
 		f += Math.pow(x,2);
 	}
@@ -91,9 +97,23 @@ function sphereFunction(x,y,type)
 
 }
 
+function rosenbrockFunction(x,y,type)
+{
+	var f = 0, n = 2;
+	for (z = 1; z<=(n-1); z++)
+		f += 100 * Math.pow( (x - Math.pow(x,2)) , 2) + Math.pow((x-1),2);
+
+	f++;
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;
+}
+
 function baeleFunction(x,y,type)
 {
-	var f = Math.pow((1.5 - x + (x*y) ),2) + Math.pow( (2.25 - x + ( x * Math.pow(y,2) ) ), 2 ) + Math.pow( (2.625 - x + ( x * Math.pow(y,3) ) ) , 2);
+	var f = Math.pow((1.5 - x + (x*y) ),2) + Math.pow( (2.25 - x + ( x * Math.pow(y,2) ) ), 2 ) + Math.pow( (2.625 - x + ( x * Math.pow(y,3) ) ) , 2) + 1;
 
 	if (type == 1)
 		return f;
@@ -113,12 +133,53 @@ function goldsteinPriceFunction(x,y,type)
 
 function boothFunction(x,y,type)
 {
-	var f = Math.pow( (x+(2*y)-7) , 2) + Math.pow(((2*x)+y-5),2);
+	var f = Math.pow( (x+(2*y)-7) , 2) + Math.pow( ( (2*x)+y-5 ), 2 ) + 1;
 
 	if (type == 1)
 		return f;
 	else
 		return 1/ f;
+}
+
+function leviFunction(x,y,type)
+{
+	var f = Math.pow( Math.sin(3*Math.PI*x) , 2 ) + Math.pow( (x-1) , 2 ) * (1 + Math.pow( (Math.sin(3*Math.PI*y)), 2) ) + Math.pow( (y-1) , 2) * ( 1 + Math.pow(Math.sin(2*Math.PI*y)), 2 );
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;		
+}
+
+function easomFunction(x,y,type)
+{
+	var f = -Math.cos(x)*Math.cos(y)*Math.exp(-( Math.pow( (x-Math.PI) , 2) + Math.pow( (y-Math.PI) , 2) ));
+
+	console.log(x,y);
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;
+}
+
+function crossFunction(x,y,type)
+{
+	var f = ( -0.0001 * Math.pow( ( Math.abs(Math.sin(x) * Math.sin(y) * Math.exp( Math.abs( 100 - ((Math.sqrt(Math.pow(x,2) + Math.pow(y,2))) / Math.PI)) ) + 1 ) ), 0.1) ) + 3;
+	
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;	
+}
+
+function eggholderFunction(x,y,type)
+{	
+	var f = -(y+47) * Math.sin(Math.sqrt(Math.abs( (x/2) + (y+47) ))) - x*Math.sin(Math.sqrt(Math.abs(x-(y+47)))) + 960;
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;		
 }
 
 function fitness(individuals, type)
@@ -141,8 +202,7 @@ function fitness(individuals, type)
 		xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 		yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-		fitness[x] = goldsteinPriceFunction(xi,yi,type);
-		fitness[x] = fitness[x];
+		fitness[x] = leviFunction(xi,yi,type);
 	}
 
 	return fitness;
@@ -166,7 +226,7 @@ function bFitness(individuals, type)
 	xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 	yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-	fitness = goldsteinPriceFunction(xi,yi,type);
+	fitness = leviFunction(xi,yi,type);
 
 	return fitness;
 }
