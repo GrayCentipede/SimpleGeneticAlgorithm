@@ -10,7 +10,7 @@ function set(func)
 	if (func== "rastrigin")
 		xl = -5.12, xu = 5.12, yl = -5.12, yu = 5.12; // Rastrigin
 
-	if (func== "ackley")
+	if (func== "ackley" || func == "styblinski")
 		xl = -5, xu = 5, yl = -5, yu = 5; //Ackley
 		
 
@@ -23,7 +23,7 @@ function set(func)
 	if (func== "goldstein")
 		xl = -2, xu = 2, yl = -2, yu = 2; //Función Goldstein-Price
 		
-	if (func== "easom")
+	if (func== "easom" || func == "schaffer")
 		xl = -100, xu = 100, yl = -100, yu = 100; //Easom *
 		
 
@@ -198,6 +198,35 @@ function eggholderFunction(x,y,type)
 		return f;
 	else
 		return 1/ f;		
+}
+
+function schafferFunction(x, y, type)
+{
+	var f = 0.5 + ( (Math.pow((Math.sin(Math.abs( Math.pow(x,2) - Math.pow(y,2) ))),2) - 0.5) / (Math.pow((1+0.0001*(Math.pow(x,2)+Math.pow(y,2))), 2)) );
+	
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;			
+}
+
+function styblinskiFunction(x,y, type)
+{
+	var f = 0, n=2;
+
+	for (z = 1; z<=n; z++)
+	{
+		f += Math.pow(x,4) - (16 * Math.pow(x,2)) + (5*x); 
+	}
+
+	f /= 2;
+
+	f+=40;
+
+	if (type == 1)
+		return f;
+	else
+		return 1/ f;			
 }
 
 function fitness(individuals, type, mathFunction)
