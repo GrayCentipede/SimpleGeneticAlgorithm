@@ -1,25 +1,42 @@
-var decimals = 4, maxGenerations = 500, populSize = 25, PC = 0.9, PM = 0.015;
-
-//var xl = -3, xu = 12.1, yl = -4.1, yu = 5.8; //Función prueba
-//var xl = -5.12, xu = 5.12, yl = -5.12, yu = 5.12; // Rastrigin
-//var xl = -5, xu = 5, yl = -5, yu = 5; //Ackley
-//var xl = -10, xu = 10, yl = -10, yu = 10; //Esfera 
-//var xl = -10, xu = 10, yl = -10, yu = 10; //Rosenbrock
-//var xl = -4.5, xu = 4.5, yl = -4.5, yu = 4.5; //Baele
-//var xl = -2, xu = 2, yl = -2, yu = 2; //Función Goldstein-Price
-//var xl = -10, xu = 10, yl = -10, yu = 10; //Booth
-var xl = -10, xu = 10, yl = -10, yu = 10; //Levi 
-//var xl = -100, xu = 100, yl = -100, yu = 100; //Easom *
-//var xl = -10, xu = 10, yl = -10, yu = 10; //Cross in tray 
-//var xl = -512, xu = 512, yl = -512, yu = 512; //Eggholder *
+var decimals = 4, maxGenerations = 100, populSize = 25, PC = 0.9, PM = 0.015;
+var xl, xu, yl, yu, xSize, ySize, chromosomeSize;		
 
 
-xSize = genSize(xl,xu,decimals);
-ySize = genSize(yl,yu,decimals);
+function set(func)
+{
+	if (func== "test")
+		xl = -3, xu = 12.1, yl = -4.1, yu = 5.8; //Función prueba		
 
-chromosomeSize = xSize + ySize;
+	if (func== "rastrigin")
+		xl = -5.12, xu = 5.12, yl = -5.12, yu = 5.12; // Rastrigin
 
-console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromosoma: "+chromosomeSize);
+	if (func== "ackley")
+		xl = -5, xu = 5, yl = -5, yu = 5; //Ackley
+		
+
+	if (func== "sphere" || func== "rosenbrock" || func== "booth" || func== "levi" || func== "cross")
+		xl = -10, xu = 10, yl = -10, yu = 10; //Esfera, Rosenbrock, Booth, Levi, Cross in tray 
+
+	if (func== "baele")
+		xl = -4.5, xu = 4.5, yl = -4.5, yu = 4.5; //Baele
+
+	if (func== "goldstein")
+		xl = -2, xu = 2, yl = -2, yu = 2; //Función Goldstein-Price
+		
+	if (func== "easom")
+		xl = -100, xu = 100, yl = -100, yu = 100; //Easom *
+		
+
+	if (func== "egg")
+		xl = -512, xu = 512, yl = -512, yu = 512; //Eggholder *
+
+	xSize = genSize(xl,xu,decimals);
+	ySize = genSize(yl,yu,decimals);
+
+	chromosomeSize = xSize + ySize;
+
+	console.log("Tamaño de X: "+xSize+"\nTamaño de Y: "+ySize+"\nTamaño del cromosoma: "+chromosomeSize);		
+}
 
 function shuffle(array)
 {
@@ -47,7 +64,7 @@ function genSize(lowerLim, upperLim, decimals) // Función que se utilizara para
 	return Math.ceil( Math.log2( (upperLim - lowerLim) * Math.pow(10,decimals) ) );
 }
 
-function mathematicalFunction(x,y,type)
+function testFunction(x,y,type)
 {
 	var f = ( 21.5 + (x * Math.sin(4 * Math.PI * x)) + (y * Math.sin(20 * Math.PI * y)) );
 	if (type==1)
@@ -121,7 +138,7 @@ function baeleFunction(x,y,type)
 		return 1/ f;
 }
 
-function goldsteinPriceFunction(x,y,type)
+function goldsteinFunction(x,y,type)
 {
 	var f = ( 1 + ( Math.pow( (x+y+1) , 2) ) * (19 -(14*x) + (3 * Math.pow(x,2)) - (14*y) + (6*x*y) + (3 * Math.pow(y,2) ) ) ) * ( 30 + Math.pow( ( (2*x) - (3*y) ) , 2 ) * ( 18 - (32*x) + ( 12 * Math.pow(x,2) ) + (48 * y) - (36*x*y) + (27*Math.pow(y,2) ) ) );
 
@@ -144,6 +161,7 @@ function boothFunction(x,y,type)
 function leviFunction(x,y,type)
 {
 	var f = Math.pow( Math.sin(3*Math.PI*x) , 2 ) + Math.pow( (x-1) , 2 ) * (1 + Math.pow( (Math.sin(3*Math.PI*y)), 2) ) + Math.pow( (y-1) , 2) * ( 1 + Math.pow(Math.sin(2*Math.PI*y)), 2 );
+	f++;
 
 	if (type == 1)
 		return f;
@@ -182,7 +200,7 @@ function eggholderFunction(x,y,type)
 		return 1/ f;		
 }
 
-function fitness(individuals, type)
+function fitness(individuals, type, mathFunction)
 {
 	var fitness = [], genX = [], genY = [];
 
@@ -202,13 +220,13 @@ function fitness(individuals, type)
 		xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 		yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-		fitness[x] = leviFunction(xi,yi,type);
+		fitness[x] = mathFunction(xi,yi,type);
 	}
 
 	return fitness;
 }
 
-function bFitness(individuals, type)
+function bFitness(individuals, type, mathFunction)
 {
 	var fitness = [], genX = [], genY = [];
 
@@ -226,7 +244,7 @@ function bFitness(individuals, type)
 	xi = xl + ( xDecimal * ( (xu - xl) / ( Math.pow(2,xSize) - 1 ) ) );
 	yi = yl + ( yDecimal * ( (yu - yl) / ( Math.pow(2,ySize) - 1 ) ) );
 
-	fitness = leviFunction(xi,yi,type);
+	fitness = mathFunction(xi,yi,type);
 
 	return fitness;
 }

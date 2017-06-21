@@ -9,6 +9,23 @@
 
     <button id="Max"> Generar Máximo </button> <button id="Min"> Generar Mínimo </button>
 
+    <form>
+      <input type="radio" name="function" value="test" checked> Función prueba </input>
+      <input type="radio" name="function" value="rastrigin"> Rastrigin </input>
+      <input type="radio" name="function" value="ackley"> Ackley </input>
+      <input type="radio" name="function" value="sphere"> Esfera </input>
+      <input type="radio" name="function" value="rosenbrock"> Rosenbrock </input>
+      <br/>
+      <input type="radio" name="function" value="baele"> Baele </input> 
+      <input type="radio" name="function" value="goldstein"> Goldstein-Price </input>
+      <input type="radio" name="function" value="booth"> Booth </input>
+      <input type="radio" name="function" value="levi"> Levi </input>
+      <input type="radio" name="function" value="easom"> Easom </input>
+      <br/>
+      <input type="radio" name="function" value="cross"> Cross in Tray </input>
+      <input type="radio" name="function" value="eggholder"> Eggholder </input>
+    </form>
+
 		<svg heigth="800" width="1500" viewBox="0 0 1000 1000">
       <text x="40" y="350" font-size="30" fill="blue" transform="rotate(270 40 350)"> Aptitud </text>
 
@@ -68,11 +85,19 @@
 		<script type="text/javascript" src="AG.js"></script>
     <script>
       document.getElementById("Max").addEventListener("click", function(){
-        generatePT(1);
+        var func = document.querySelector('input[name="function"]:checked').value;
+        var mathFunction = func + "Function";
+        mathFunction = window[mathFunction];
+        set(func);
+        generatePT(1, mathFunction);
       });
 
       document.getElementById("Min").addEventListener("click", function(){
-        generatePT(0);
+        var func = document.querySelector('input[name="function"]:checked').value;
+        var mathFunction = func + "Function";
+        mathFunction = window[mathFunction];
+        set(func);
+        generatePT(0, mathFunction);
       });
     </script>
 	</body>

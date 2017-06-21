@@ -19,7 +19,7 @@ PASOS A SEGUIR PARA UN AG
 
 // ------------------------------
 
-function generateCET(type)
+function generateCET(type, mathFunction)
 {	
 	var generation = 0, bestFitness = 0, generalFitness = 0;
 
@@ -51,11 +51,11 @@ function generateCET(type)
 		for (x in individuals)
 			console.log("Individuo "+ (parseInt(x)+1) +": "+individuals[x].join(""));
 
-		individualsFitness = fitness(individuals, type);
+		individualsFitness = fitness(individuals, type, mathFunction);
 
 		generalFitness = populationFitness(individualsFitness);
 
-		bestFitnessZ = bFitness(bestIndividual, type);
+		bestFitnessZ = bFitness(bestIndividual, type, mathFunction);
 
 		console.log("Aptitud que pasó: "+bestFitnessZ);
 

@@ -19,7 +19,7 @@ PASOS A SEGUIR PARA UN AG
 
 // ------------------------------
 
-function generateCT(type)
+function generateCT(type, mathFunction)
 {
 	var generation = 0, bestFitness = 0, generalFitness = 0;
 
@@ -48,7 +48,7 @@ function generateCT(type)
 
 		console.log("------------------ Población --------------------");
 
-		individualsFitness = fitness(individuals, type);
+		individualsFitness = fitness(individuals, type, mathFunction);
 
 		generalFitness = populationFitness(individualsFitness);
 

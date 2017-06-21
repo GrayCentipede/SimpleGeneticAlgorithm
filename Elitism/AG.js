@@ -20,7 +20,7 @@ PASOS A SEGUIR PARA UN AG
 
 // ------------------------------
 
-function generateE(type)
+function generateE(type, mathFunction)
 {
 	var generation = 0, generalFitness = 0, bestFitness = 0, worstFitness = 0, bfLoc = 0, wfLoc = 0;
 
@@ -49,13 +49,13 @@ function generateE(type)
 
 		console.log("------------------ Población --------------------");
 
-		individualsFitness = fitness(individuals, type);
+		individualsFitness = fitness(individuals, type, mathFunction);
 
 		generalFitness = populationFitness(individualsFitness);
 
 		relativeFitness = relative(individualsFitness, generalFitness);
 
-		bestFitnessZ = bFitness(bestIndividual, type);
+		bestFitnessZ = bFitness(bestIndividual, type, mathFunction);
 
 		bestRealitiveF = bRelative(bestFitnessZ, generalFitness);
 

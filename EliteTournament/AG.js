@@ -19,7 +19,7 @@ PASOS A SEGUIR PARA UN AG
 
 // ------------------------------
 
-function generateET(type)
+function generateET(type, mathFunction)
 {
 	var generation = 0, generalFitness = 0;
 
@@ -48,11 +48,11 @@ function generateET(type)
 
 		console.log("------------------ Población --------------------");
 
-		individualsFitness = fitness(individuals, type);
+		individualsFitness = fitness(individuals, type, mathFunction);
 
 		generalFitness = populationFitness(individualsFitness);
 
-		bestFitnessZ = bFitness(bestIndividual, type);
+		bestFitnessZ = bFitness(bestIndividual, type, mathFunction);
 
 		console.log("Aptitud de la Generación: "+generalFitness);
 

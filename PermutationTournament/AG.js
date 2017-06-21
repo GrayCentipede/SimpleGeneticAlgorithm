@@ -21,7 +21,7 @@ var individuals = [], relativeFitness = [], selectedOnes = [];
 
 // ------------------------------
 
-function generatePT(type)
+function generatePT(type, mathFunction)
 {
 	var generation = 0, bestFitness = 0, generalFitness = 0;
 
@@ -48,7 +48,7 @@ function generatePT(type)
 
 		console.log("------------------ Población --------------------");
 
-		individualsFitness = fitness(individuals, type);
+		individualsFitness = fitness(individuals, type, mathFunction);
 
 		generalFitness = populationFitness(individualsFitness);
 
