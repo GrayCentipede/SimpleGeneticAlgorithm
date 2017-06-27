@@ -1,4 +1,4 @@
-var decimals = 4, maxGenerations = 100, populSize = 25, PC = 0.9, PM = 0.015;
+var decimals = 4, maxGenerations = 100, populSize = 25, PC = 0.75, PM = 0.015;
 var xl, xu, yl, yu, xSize, ySize, chromosomeSize;		
 
 
@@ -172,6 +172,7 @@ function leviFunction(x,y,type)
 function easomFunction(x,y,type)
 {
 	var f = -Math.cos(x)*Math.cos(y)*Math.exp(-( Math.pow( (x-Math.PI) , 2) + Math.pow( (y-Math.PI) , 2) ));
+	f++;
 
 	console.log(x,y);
 
